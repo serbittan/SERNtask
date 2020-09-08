@@ -1,26 +1,31 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { ItemTask } from '.'
 import { ButtonRemove } from '../layout'
+import { projectContext } from '../context/projects'
+import { taskContext } from '../context/tasks'
 
 const ResultTasks = () => {
-    const tasks = [
-        { id: 1, name: 'color calidos', status: false, projectId: 2 },
-        { id: 2, name: 'color ocres', status: true, projectId: 3 },
-        { id: 3, name: 'color turquesas', status: false, projectId: 3 },
-        { id: 4, name: 'main principal', status: true, projectId: 1 },
-        { id: 5, name: 'header luminoso', status: true, projectId: 4 },
-        { id: 6, name: 'acabados', status: false, projectId: 1 },
-        { id: 7, name: 'navegacion', status: false, projectId: 4 },
-    ]
+    // Traer state de project.
+    const projectsContext = useContext(projectContext)
+    const { project } = projectsContext
+
+    // Traer state de task.
+    const tasksContext = useContext(taskContext)
+    const { tasksproject } = tasksContext
+
+
+    if (!project) return <h2>Select a project</h2>
+
+
     return (
         <Fragment>
-            <h2>Project: Color</h2>
+            <h2>Project: {project.name}</h2>
 
             <ul className="listado-tareas">
-                {tasks.length === 0 ?
+                {tasksproject.length === 0 ?
                     (<li className="tarea"><p>No tasks yet!</p></li>)
                     :
-                    (tasks.map(task =>
+                    (tasksproject.map(task =>
                         <ItemTask
                             key={task.id}
                             task={task}

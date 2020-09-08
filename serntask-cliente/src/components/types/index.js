@@ -2,3 +2,8 @@ export const SHOW_FORMPROJECT = 'SHOW_FORMPROJECT'
 export const GET_PROJECTS = 'GET_PROJECTS'
 export const ADD_PROJECT = 'ADD_PROJECT'
 export const FORM_VALIDATE = 'FORM_VALIDATE'
+export const CURRENT_PROJECT = 'CURRENT_PROJECT'
+export const REMOVE_PROJECT = 'REMOVE_PROJECT'
+
+export const GET_TASKS = 'GET_TASKS'
+export const ADD_TASK = 'ADD_TASK'

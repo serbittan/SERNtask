@@ -2,7 +2,9 @@ import {
     SHOW_FORMPROJECT,
     GET_PROJECTS,
     ADD_PROJECT,
-    FORM_VALIDATE
+    FORM_VALIDATE,
+    CURRENT_PROJECT,
+    REMOVE_PROJECT
 } from '../../types'
 
 
@@ -32,6 +34,19 @@ const projectReducer = (state, action) => {
             return {
                 ...state,
                 errorform: true
+            }
+
+        case CURRENT_PROJECT:
+            return {
+                ...state,
+                project: action.payload
+            }
+
+        case REMOVE_PROJECT:
+            return {
+                ...state,
+                projects: state.projects.filter(project => project.id !== action.payload),
+                project: null
             }
         default:
             return state

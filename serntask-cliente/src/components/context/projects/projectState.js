@@ -6,7 +6,9 @@ import {
     SHOW_FORMPROJECT,
     GET_PROJECTS,
     ADD_PROJECT,
-    FORM_VALIDATE
+    FORM_VALIDATE,
+    CURRENT_PROJECT,
+    REMOVE_PROJECT
 } from '../../types'
 
 
@@ -19,7 +21,8 @@ const ProjectState = ({ children }) => {
             { id: 3, name: 'desing IU' },
             { id: 4, name: 'hosting' }
         ],
-        errorform: false
+        errorform: false,
+        project: null
     }
 
     const [state, dispatch] = useReducer(projectReducer, initialState)
@@ -54,16 +57,37 @@ const ProjectState = ({ children }) => {
             type: FORM_VALIDATE
         })
     }
+
+    // Function que pone un proyecto en activo
+    const activeProject = project => {
+        dispatch({
+            type: CURRENT_PROJECT,
+            payload: project
+        })
+    }
+
+    // Function que elimina un proyecto.
+    const removeProject = id => {
+        dispatch({
+            type: REMOVE_PROJECT,
+            payload: id
+        })
+    }
+
+
     return ( 
         <projectContext.Provider
             value={{
                 formproject: state.formproject,
                 projects: state.projects,
                 errorform: state.errorform,
+                project: state.project,
                 showFormProject,
                 getProjects,
                 addProject,
-                formError
+                formError,
+                activeProject,
+                removeProject
             }}>
             { children }
         </projectContext.Provider>
