@@ -1,7 +1,36 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { taskContext } from '../context/tasks'
+
 
 const ItemTask = ({ task }) => {
-    const { id, name, status, projectId } = task
+    const { name, status } = task
+
+    // Traer state de task.
+    const tasksContext = useContext(taskContext)
+    const { statusTask, deleteTask, getTasks, taskSelected } = tasksContext
+
+    // Function para cambiar status.
+    const handleOnStatus = task => {
+        if (task.status) {
+            task.status = false
+        } else {
+            task.status = true
+        }
+        statusTask(task)
+    }
+
+    // Funcion que elimina una task.
+    const handleDelete = task => {
+        deleteTask(task.id)
+        getTasks(task.projectId)
+    }
+
+    // Function que selecciona una task
+    const handleOnSelectedTask = task => {
+        taskSelected(task)
+    }
+
+
     return ( 
         <li className="tarea sombra">
             <p>{name}</p>
@@ -12,6 +41,7 @@ const ItemTask = ({ task }) => {
                     <button
                         type="button"
                         className="completo"
+                        onClick={() => handleOnStatus(task)}
                     >Completed</button>
                 )
                 :
@@ -19,6 +49,7 @@ const ItemTask = ({ task }) => {
                     <button
                         type="button"
                         className="incompleto"
+                        onClick={() => handleOnStatus(task)}
                     >Incompleted</button>
                 )
             }</div>
@@ -27,11 +58,13 @@ const ItemTask = ({ task }) => {
                 <button
                     type="button"
                     className="btn btn-primario"
+                    onClick={() => handleOnSelectedTask(task)}
                 >Edit</button>
 
                 <button
                     type="button"
                     className="btn btn-secundario"
+                    onClick={() => handleDelete(task)}
                 >Delete</button>
             </div>
 

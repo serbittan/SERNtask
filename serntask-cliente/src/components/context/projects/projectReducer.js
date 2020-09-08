@@ -39,7 +39,7 @@ const projectReducer = (state, action) => {
         case CURRENT_PROJECT:
             return {
                 ...state,
-                project: action.payload
+                project: action.payload  // otra opción sería utilizar un filter
             }
 
         case REMOVE_PROJECT:

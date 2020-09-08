@@ -3,6 +3,7 @@ import { ItemTask } from '.'
 import { ButtonRemove } from '../layout'
 import { projectContext } from '../context/projects'
 import { taskContext } from '../context/tasks'
+// import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 const ResultTasks = () => {
     // Traer state de project.
@@ -26,13 +27,15 @@ const ResultTasks = () => {
                     (<li className="tarea"><p>No tasks yet!</p></li>)
                     :
                     (tasksproject.map(task =>
+
                         <ItemTask
                             key={task.id}
                             task={task}
                         />)
-                    )}
+                    )
+                }
             </ul>
-            <ButtonRemove/>
+            <ButtonRemove />
         </Fragment>
     )
 }

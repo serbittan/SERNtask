@@ -1,6 +1,9 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { projectContext } from '../context/projects'
 import { taskContext } from '../context/tasks'
+
+
+
 const FormTasks = () => {
     // Traer state de project.
     const projectsContext = useContext(projectContext)
@@ -8,7 +11,7 @@ const FormTasks = () => {
 
     // Traer state de task.
     const tasksContext = useContext(taskContext)
-    const { addTask, getTasks } = tasksContext
+    const { taskselected, errorTask, addTask, getTasks, taskError, updateTask, cleanTask } = tasksContext
 
     // State propio del form.
     const [task, setTask] = useState({
@@ -23,19 +26,41 @@ const FormTasks = () => {
             [event.target.name]: event.target.value
         })
     }
+    
+
+    // Efecto que despues de renderizar comprueba si hay taskselected en true
+    useEffect(() => {
+        if (taskselected !== null) {
+            setTask(taskselected)
+        }
+    },[taskselected])
+
 
     // Function que envia la task cuando user hace click
     const handleOnSubmit = event => {
         event.preventDefault()
 
         // validar campos
-        if (!name.trim()) return
+        if (!name.trim()) {
+            taskError()
 
-        // añadirle propiedades a newtask
-        task.projectId = project.id
-        task.status = false
-        addTask(task)
-        getTasks(task.projectId)
+            return
+        }
+        if (taskselected) {
+            updateTask(task)
+
+            getTasks(task.projectId)
+
+            cleanTask()
+        } else {
+            // añadirle propiedades a newtask
+            task.projectId = project.id
+            task.status = false
+            addTask(task)
+            getTasks(task.projectId)
+
+        }
+
 
         // reiniciar formtask
         setTask({
@@ -61,10 +86,12 @@ const FormTasks = () => {
                     <input
                         type="submit"
                         className="btn btn-block btn-primario"
-                        value="Add Task"
+                        value={taskselected ? "Edit Task" : "Add Task"}
                     />
                 </div>
             </form>}
+
+            {errorTask && <p className="mensaje error">Task Name is required!</p>}
         </div>
     )
 }

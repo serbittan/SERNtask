@@ -3,7 +3,7 @@ import { projectContext } from '../context/projects'
 import { taskContext } from '../context/tasks'
 
 const ItemProject = ({ project }) => {
-    const { id, name } = project
+    const { name } = project
 
     // Traer el state de project.
     const projectsContext = useContext(projectContext)

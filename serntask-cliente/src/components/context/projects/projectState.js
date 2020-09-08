@@ -13,14 +13,16 @@ import {
 
 
 const ProjectState = ({ children }) => {
+    const projects = [
+        { id: 1, name: 'visual' },
+        { id: 2, name: 'color' },
+        { id: 3, name: 'desing IU' },
+        { id: 4, name: 'hosting' }
+    ]
+
     const initialState = {
         formproject : false,
-        projects : [
-            { id: 1, name: 'visual' },
-            { id: 2, name: 'color' },
-            { id: 3, name: 'desing IU' },
-            { id: 4, name: 'hosting' }
-        ],
+        projects : [],
         errorform: false,
         project: null
     }
@@ -35,7 +37,7 @@ const ProjectState = ({ children }) => {
     }
 
     // Function que obtiene/trae los proyectos.
-    const getProjects = projects => {
+    const getProjects = () => {
         dispatch({
             type: GET_PROJECTS,
             payload: projects
