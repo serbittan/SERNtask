@@ -1,0 +1,20 @@
+{
+  "name": "serntask-server",
+  "version": "1.0.0",
+  "description": "serntask server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "author": "sergi bittan",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "serntask-data": "file:../serntask-data"
+  }
+}
