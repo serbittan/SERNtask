@@ -5,9 +5,9 @@ const user = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, require: true },
-    created: { type: Data, require: true, default: Data.now()},
-    authenticated: { type: Data },
-    retrieved: { type: Data }
+    created: { type: Date, require: true, default: Date.now()},
+    authenticated: { type: Date },
+    retrieved: { type: Date }
 })
 
 module.exports = user
