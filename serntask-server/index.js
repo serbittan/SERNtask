@@ -9,7 +9,7 @@ const winston = require('winston')
 const morgan = require('morgan')
 const fs = require('fs')
 const path = require('path')
-// const router = require('./routes')
+const router = require('./routes')
 // const cors = require('cors')
 const { mongoose } = require('serntask-data')  // añadido a packaje.json como dependencia
 
@@ -32,10 +32,9 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true 
                 format: winston.format.simple()
             }))
         }
+        console.log('base de datos connectada')
 
-        const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
-            flags: 'a'
-        })
+        const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 
         // Creamos server
         const app = express()
@@ -57,6 +56,11 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true 
 
             process.exit(0)
         })
+    })
+    .catch(dbError => {
+        console.log('DB Connection Error:', dbError.message)
+
+        process.exit(1)
     })
 
 
