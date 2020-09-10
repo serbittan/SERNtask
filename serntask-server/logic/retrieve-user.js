@@ -7,7 +7,7 @@ const retrieveUser = (id) => {
     return (async () => {
         const user = await User.findById(id)
 
-        if (!user) throw new NotFoundError(`user with id ${id} do not exist`)
+        if (!user) throw new Error(`user with id ${id} do not exist`)
 
         return user
     })()

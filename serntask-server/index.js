@@ -41,6 +41,7 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true 
 
         // app.use(cors())
 
+        
         app.use(morgan('combined', { stream: accessLogStream }))
 
         app.use("/api", router)  // Router es de express y lo requeriremos en index de folder routes.

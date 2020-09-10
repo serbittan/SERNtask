@@ -7,11 +7,11 @@ const registerUser = (name, email, password) => {
     return (async () => {
         let user = await User.findOne({ email })
 
-        if (user) throw new NotFoundError(`user with ${email} already exist`)
+        if (user) throw new Error('El usuario ya existe')
 
         const validPassword = await bcrypt.hash(password, 10)
 
-        user = await new User({name, email, password : validPassword})
+        user = await new User({ name, email, password : validPassword })
 
         await user.save()
 
