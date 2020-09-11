@@ -1,4 +1,4 @@
-const { Schema: { Types: { ObjectId } } } = require('mongoose')
+const { Schema, Types: { ObjectId }  } = require('mongoose')
 
 module.exports = new Schema({
     name: {
@@ -6,13 +6,11 @@ module.exports = new Schema({
         required: true
     },
     creator: {
-        type: ObjectId,
-        required: true,
+        type: ObjectId,  // mongoose.Schema.Types.ObjectId
         ref: "User"
     },
     created: {
-        type: Date,
-        required: true, 
+        type: Date, 
         default: Date.now()
     }
 })
