@@ -11,12 +11,18 @@ const { check } = require('express-validator')
 const {
     registerUser,
     authenticateUser,
-    retrieveUser
+    retrieveUser,
+    createProject,
+    retrieveProjects,
+    updateProject,
+    deleteProject
 } = require('./handlers')
 
 // Añadimos: jwtVerifierMidware y jsonBodyParser o el propio bodyparser de express
- const jsonBodyParser = express.json()
+const jsonBodyParser = express.json()
 
+// MidleWare
+const jwtVerifierMidware = require('../mid-wares/jwt-verifier-mid-ware')
 
 // Creamos nuestras rutas con router.
 
@@ -28,7 +34,7 @@ router.post('/users', jsonBodyParser,
         check("email", "put a valid email").isEmail(),
         check("password", "minimum password of 6 characters").isLength({ min: 6 })
     ],
-     registerUser)
+    registerUser)
 
 router.post('/users/auth', jsonBodyParser,
     [
@@ -36,9 +42,31 @@ router.post('/users/auth', jsonBodyParser,
         check("email", "put a valid email").isEmail(),
         check("password", "minimum password of 6 characters").isLength({ min: 6 })
     ],
-     authenticateUser)
-     
-router.get('/users', retrieveUser)
+    authenticateUser)
+
+router.get('/users', jwtVerifierMidware, retrieveUser)
+
+
+// projects
+router.post(
+    '/projects', jwtVerifierMidware, jsonBodyParser,
+    [
+        check("name", "Project Name is required").not().isEmpty()
+    ],
+    createProject
+)
+
+
+router.get('/projects', jwtVerifierMidware, retrieveProjects)
+
+router.put('/projects/:projectId', jwtVerifierMidware, jsonBodyParser,
+    [
+        check("name", "Project Name is required").not().isEmpty()
+    ],
+    updateProject
+)
+
+router.delete('/projects/delete/:projectId', jwtVerifierMidware, deleteProject)
 
 
 

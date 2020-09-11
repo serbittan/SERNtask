@@ -13,7 +13,7 @@ module.exports = (req, res) => {
     try {
         registerUser(name, email, password)
             .then(() => {
-                res.status(200).json({ msg: 'Usuario creado correctamente' })
+                res.status(200).json({ msg: 'User created succesfuly' })
             })
             .catch(error => {
                 res.status(400).json({ msg: error.message })

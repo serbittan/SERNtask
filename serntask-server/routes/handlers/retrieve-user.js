@@ -2,8 +2,8 @@ const { retrieveUser } = require('../../logic')
 
 
 module.exports = (req, res) => {
-    const { sub: id } = req
-    console.log(id)
+    const { payload: { sub: id} } = req
+    
     try{
         retrieveUser(id)
             .then(user => 
