@@ -12,7 +12,7 @@ const path = require('path')
 const router = require('./routes')
 // const cors = require('cors')
 const { mongoose } = require('serntask-data')  // añadido a packaje.json como dependencia
-
+// console.log(mongoose.Schema)
 const { name, version } = require('./package.json')   // Como info
 
 

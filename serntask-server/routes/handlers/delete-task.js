@@ -1,19 +1,18 @@
-const { deleteProject } = require('../../logic')
-
+const { deleteTask } = require('../../logic')
 
 module.exports = (req, res) => {
-    const { payload: { sub: id }, params: { projectId } } = req
+    const { payload: { sub: id }, params: { project, taskId } } = req
 
     try {
-        deleteProject(id, projectId)
+        deleteTask(id, project, taskId)
             .then(() =>
                 res
                     .status(200)
-                    .json({ msg: 'Project removed successfully' })
+                    .json({ msg: 'Task deleted successfully'})
             )
-            .catch(error =>
+            .catch(error => 
                 res
-                    .status(401)
+                    .status(400)
                     .json({ msg: error.message })
             )
     } catch (error) {

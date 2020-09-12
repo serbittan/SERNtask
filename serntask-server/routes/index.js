@@ -15,7 +15,11 @@ const {
     createProject,
     retrieveProjects,
     updateProject,
-    deleteProject
+    deleteProject,
+    createTask,
+    retrieveTasks,
+    deleteTask,
+    updateTask
 } = require('./handlers')
 
 // Añadimos: jwtVerifierMidware y jsonBodyParser o el propio bodyparser de express
@@ -68,6 +72,23 @@ router.put('/projects/:projectId', jwtVerifierMidware, jsonBodyParser,
 
 router.delete('/projects/delete/:projectId', jwtVerifierMidware, deleteProject)
 
+// Tasks
+router.post('/tasks', jwtVerifierMidware, jsonBodyParser,
+    [
+        check("name", "Task name is required").not().isEmpty()
+    ],
+    createTask
+)
 
+router.get('/tasks/:project', jwtVerifierMidware, retrieveTasks)
+
+router.delete('/tasks/delete/:project/:taskId', jwtVerifierMidware, deleteTask)
+
+router.put('/tasks/:project/:taskId', jwtVerifierMidware, jsonBodyParser,
+    [
+        check("name", "Task name is required").not().isEmpty()
+    ],
+    updateTask
+)
 
 module.exports = router
