@@ -10,7 +10,7 @@ const morgan = require('morgan')
 const fs = require('fs')
 const path = require('path')
 const router = require('./routes')
-// const cors = require('cors')
+const cors = require('cors')
 const { mongoose } = require('serntask-data')  // añadido a packaje.json como dependencia
 // console.log(mongoose.Schema)
 const { name, version } = require('./package.json')   // Como info
@@ -39,7 +39,7 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true 
         // Creamos server
         const app = express()
 
-        // app.use(cors())
+        app.use(cors())
 
         
         app.use(morgan('combined', { stream: accessLogStream }))

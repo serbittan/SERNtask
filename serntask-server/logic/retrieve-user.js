@@ -5,7 +5,7 @@ const retrieveUser = (id) => {
     
 
     return (async () => {
-        const user = await User.findById(id).lean()
+        const user = await User.findById(id).lean().select('-password')
 
         if (!user) throw new Error(`User with id: ${id} not exist`)
 

@@ -36,16 +36,19 @@ router.post('/users', jsonBodyParser,
         check("name", "name is required").not().isEmpty(),
         check("email", "email is required").not().isEmpty(),
         check("email", "put a valid email").isEmail(),
-        check("password", "minimum password of 6 characters").isLength({ min: 6 })
+        check("password", "minimum password of 6 characters").isLength({ min: 6 }),
+        // check("confirm", "password & confirm should be equals").equals()
     ],
     registerUser)
 
 router.post('/users/auth', jsonBodyParser,
-    [
-        check("email", "email is required").not().isEmpty(),
-        check("email", "put a valid email").isEmail(),
-        check("password", "minimum password of 6 characters").isLength({ min: 6 })
-    ],
+
+             // esta validación se ha hecho en front y la comento aquí
+    // [
+    //     check("email", "email is required").not().isEmpty(),
+    //     check("email", "put a valid email").isEmail(),
+    //     check("password", "minimum password of 6 characters").isLength({ min: 6 })
+    // ],
     authenticateUser)
 
 router.get('/users', jwtVerifierMidware, retrieveUser)
