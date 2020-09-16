@@ -1,7 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Feedback } from '.'
+import { alertContext } from '../context/alerts'
+import { authContext } from '../context/auth'
 
-const Register = () => {
+const Register = ( { history }) => {
+    // Traer el state de auth.
+    const authsContext = useContext(authContext)
+    const { registered, message, handleRegisterUser } = authsContext
+
+    // Traer el state de alert.
+    const alertsContext = useContext(alertContext)
+    const { alert, showAlert } = alertsContext
+
+    // Function que se ejecutará al cargar el componente
+    useEffect(() => {
+        if (registered) {
+            history.push('/')
+        }
+        if (message) {
+            showAlert(message.msg, message.category)
+        }
+    }, [history, message, registered])
+
     // Register state
     const [user, setUser] = useState({
         name: '',
@@ -14,7 +35,7 @@ const Register = () => {
     // Para leer los campos del form
     const handleOnChange = event => {
         setUser({
-            ...user, 
+            ...user,
             [event.target.name]: event.target.value
         })
     }
@@ -24,26 +45,40 @@ const Register = () => {
         event.preventDefault()
 
         // validar campos
-        if (name.trim() || email.trim() || password.trim() || confirm.trim())  return
+        if (!name.trim() || !email.trim() || !password.trim() || !confirm.trim()) {
+            showAlert('All fields are required', 'alert-error')
+
+            return
+        } 
+
         // password 6 caracteres
-        if (password.length < 6) return
+        if (password.length < 6) {
+            showAlert('the password must have a minimum of 6 characters', 'alert-error')
+
+            return
+        } 
+            
         // password y confirm iguales
-        if (password !== confirm) return
-           
-        // enviar al action
-        
-        
-        // setear campos
-        setUser({
-            name: '',
-            email: '',
-            password: '',
-            confirm: ''
-        })
+        if (password !== confirm) {
+            showAlert('password should be equals', 'alert-error')
+
+            return
+        }
+
+        handleRegisterUser(user)
+
     }
+
+
+
+
+
     return (
         <div className="form-usuario">
             <div className="contenedor-form">
+
+                {alert && <Feedback message={alert.msg} level={alert.category} />}
+
                 <h1>Register</h1>
                 <form
                     onSubmit={handleOnSubmit}>

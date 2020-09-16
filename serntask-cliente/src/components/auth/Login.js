@@ -1,7 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Feedback } from '.'
+import { alertContext } from '../context/alerts'
+import { authContext } from '../context/auth'
 
-const Login = () => {
+const Login = ({ history }) => {
+    // Traer el state de auth.
+    const authsContext = useContext(authContext)
+    const { authenticated, message, handleLogin } = authsContext
+
+    // Traer el state de alert.
+    const alertsContext = useContext(alertContext)
+    const { alert, showAlert } = alertsContext
+
+    // Function que se ejecuta después de renderizar el componente.
+    useEffect(() => {
+        if (authenticated) {
+            history.push('/projects')
+        }
+        if (message) {
+            showAlert(message.msg, message.category)
+        }
+    }, [authenticated, message, history])
+
     // Login state
     const [user, setUser] = useState({
         email: '',
@@ -23,12 +44,22 @@ const Login = () => {
         event.preventDefault()
 
         // validar campos
-        // enviar al action
-        // setear
+        if (!email.trim() || !password.trim()) {
+            showAlert('All fields are required', 'alert-error')
+
+            return
+        } 
+        
+        handleLogin(user)
     }
+
+    
     return (
         <div className="form-usuario">
             <div className="contenedor-form sombra-dark">
+
+            {alert && <Feedback message={alert.msg} level={alert.category} />}
+
                 <h1>Login</h1>
                 <form
                     onSubmit={handleOnSubmit}>
