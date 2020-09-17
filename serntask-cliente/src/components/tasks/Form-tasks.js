@@ -32,7 +32,12 @@ const FormTasks = () => {
     useEffect(() => {
         if (taskselected !== null) {
             setTask(taskselected)
-        } 
+        } else {
+            // si tareaselected vuelve a null limpio el Form.
+            setTask({
+                name: ''
+            })
+        }
         
     },[taskselected])
 
@@ -79,7 +84,7 @@ const FormTasks = () => {
                         className="input-text"
                         placeholder="Task Name"
                         name="name"
-                        autoFocus
+                        autoFocus={true}
                         onChange={handleOnChange}
                         value={name}
                     />

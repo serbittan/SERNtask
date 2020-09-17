@@ -10,14 +10,16 @@ import {
     DELETE_TASK,
     TASK_SELECTED,
     UPDATE_TASK,
-    CLEAN_TASK
+    CLEAN_TASK,
+    TASK_ERROR
 } from '../../types'
 
 const TaskState = ({ children }) => {
     const initialState = {
         tasksproject: [],
         errorTask: false,
-        taskselected: null
+        taskselected: null,
+        message: null
     }
 
     const [state, dispatch] = useReducer(taskReducer, initialState)
@@ -32,7 +34,14 @@ const TaskState = ({ children }) => {
                     payload: response.data
                 })
             } catch (error) {
-                console.log(error.response)
+                const alert = {
+                    msg: 'There was a mistake',
+                    category: 'alert-error'
+                }
+                dispatch({
+                    type: TASK_ERROR,
+                    payload: alert
+                })
             }
         })()
     }
@@ -48,7 +57,14 @@ const TaskState = ({ children }) => {
                     payload: task
                 })
             } catch (error) {
-                console.log(error.response)
+                const alert = {
+                    msg: 'There was a mistake',
+                    category: 'alert-error'
+                }
+                dispatch({
+                    type: TASK_ERROR,
+                    payload: alert
+                })
             }
         })()
     }
@@ -80,7 +96,14 @@ const TaskState = ({ children }) => {
                     payload: id
                 })
             } catch (error) {
-                console.log(error.response)
+                const alert = {
+                    msg: 'There was a mistake',
+                    category: 'alert-error'
+                }
+                dispatch({
+                    type: TASK_ERROR,
+                    payload: alert
+                })
             }
         })()
 
@@ -105,7 +128,14 @@ const TaskState = ({ children }) => {
                     payload: response.data
                 })
             } catch (error) {
-                console.log(error)
+                const alert = {
+                    msg: 'There was a mistake',
+                    category: 'alert-error'
+                }
+                dispatch({
+                    type: TASK_ERROR,
+                    payload: alert
+                })
             }
         })()
 
@@ -125,6 +155,7 @@ const TaskState = ({ children }) => {
                 tasksproject: state.tasksproject,
                 errorTask: state.errorTask,
                 taskselected: state.taskselected,
+                message: state.message,
                 getTasks,
                 addTask,
                 taskError,

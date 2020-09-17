@@ -6,7 +6,8 @@ import {
     DELETE_TASK,
     TASK_SELECTED,
     UPDATE_TASK,
-    CLEAN_TASK
+    CLEAN_TASK,
+    TASK_ERROR
 } from '../../types'
 
 
@@ -57,6 +58,12 @@ const taskReducer = (state, action) => {
             return {
                 ...state,
                 taskselected: null
+            }
+
+        case TASK_ERROR:
+            return {
+                ...state,
+                message: action.payload
             }
         default:
             return state

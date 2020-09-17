@@ -7,7 +7,7 @@ import { authContext } from '../context/auth'
 const Login = ({ history }) => {
     // Traer el state de auth.
     const authsContext = useContext(authContext)
-    const { authenticated, message, handleLogin } = authsContext
+    const { authenticated, message, handleLogin, cleanMessage } = authsContext
 
     // Traer el state de alert.
     const alertsContext = useContext(alertContext)
@@ -20,7 +20,7 @@ const Login = ({ history }) => {
         }
         if (message) {
             showAlert(message.msg, message.category)
-             
+
         }
         // eslint-disable-next-line
     }, [authenticated, message, history])
@@ -96,7 +96,11 @@ const Login = ({ history }) => {
                     </div>
 
                 </form>
-                <Link to={"/register"} className="enlace-cuenta">Go To Register</Link>
+                <Link to={"/register"}
+                    className="enlace-cuenta"
+                    onClick={cleanMessage}
+                >Go To Register</Link>
+
             </div>
 
 

@@ -14,7 +14,8 @@ import {
     GET_USER,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
-    CLOSE_SESSION
+    CLOSE_SESSION,
+    CLEAN_MESSAGE
 } from '../../types'
 
 
@@ -115,6 +116,13 @@ const AuthState = ({ children }) => {
         })
     }
 
+    // Function que limpia el message: Link Login/Register
+    const cleanMessage = () => {
+        dispatch({
+            type: CLEAN_MESSAGE
+        })
+    }
+
 
 
 
@@ -131,7 +139,8 @@ const AuthState = ({ children }) => {
                 handleRegisterUser,
                 handleLogin,
                 handleRetrieveUser,
-                handleOnLogout
+                handleOnLogout,
+                cleanMessage
             }}>
             {children}
         </authContext.Provider>

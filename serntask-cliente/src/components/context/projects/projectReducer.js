@@ -55,6 +55,7 @@ const projectReducer = (state, action) => {
                 ...state,
                 message: action.payload
             }
+
         default:
             return state
     }

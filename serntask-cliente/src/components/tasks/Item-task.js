@@ -28,7 +28,8 @@ const ItemTask = ({ task }) => {
     const handleDelete = id => {
         deleteTask(id, project.id)
         getTasks(project.id)
-
+        // ejecutamos cleanTask para limpiar el FormTask cuando elimina una tarea
+        cleanTask()
     }
 
     // Function que selecciona una task

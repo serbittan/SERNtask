@@ -4,10 +4,11 @@ import { Feedback } from '.'
 import { alertContext } from '../context/alerts'
 import { authContext } from '../context/auth'
 
+
 const Register = ({ history }) => {
     // Traer el state de auth.
     const authsContext = useContext(authContext)
-    const { registered, message, handleRegisterUser } = authsContext
+    const { registered, message, handleRegisterUser, cleanMessage } = authsContext
 
     // Traer el state de alert.
     const alertsContext = useContext(alertContext)
@@ -135,7 +136,11 @@ const Register = ({ history }) => {
                         />
                     </div>
                 </form>
-                <Link to={"/"} className="enlace-cuenta">Go To Login</Link>
+                <Link to={"/"}
+                    className="enlace-cuenta"
+                    onClick={cleanMessage}
+                >Go To Login</Link>
+
             </div>
         </div>
     )

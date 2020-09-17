@@ -4,7 +4,8 @@ import {
     GET_USER,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
-    CLOSE_SESSION
+    CLOSE_SESSION,
+    CLEAN_MESSAGE
 } from '../../types'
 
 
@@ -62,6 +63,12 @@ const authReducer = (state, action) => {
                 message: action.payload,
                 authenticated: null,
                 registered: null
+            }
+
+            case CLEAN_MESSAGE:
+            return {
+                ...state,
+                message: null
             }
 
         default:
