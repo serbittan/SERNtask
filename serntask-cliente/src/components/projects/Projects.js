@@ -8,29 +8,31 @@ const Projects = () => {
     const authsContext = useContext(authContext)
     const { handleRetrieveUser } = authsContext
 
+    // Si estoy autenticado se trae la info de user y activa el token en headers.
     useEffect(() => {
-            handleRetrieveUser()
+        handleRetrieveUser()
 
+        // eslint-disable-next-line
     }, [])
 
 
-    return ( 
+    return (
         <div className="contenedor-app">
-            <Sidebar/>
+            <Sidebar />
             <div className="seccion-principal">
                 <Header />
                 <main>
-                    <FormTasks/>
+                    <FormTasks />
 
                     <div className="contenedor-tareas">
 
-                        <ResultTasks/>
+                        <ResultTasks />
 
                     </div>
                 </main>
             </div>
         </div>
-     )
+    )
 }
- 
+
 export default Projects

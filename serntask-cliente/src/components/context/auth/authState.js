@@ -1,7 +1,12 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useContext } from 'react'
 import { authReducer, authContext } from '.'
 import { registerUser, login, retrieveUser } from '../../../logic'
 import tokenAuth from '../../../config/token-auth'
+
+// Para solucionar el problema de que el project no se acaba de anular al hacer logout
+// traemos el context de project y probamos lo siguiente:
+import { projectContext } from '../projects'
+
 
 import {
     REGISTER_SUCCESS,
@@ -9,10 +14,15 @@ import {
     GET_USER,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
+    CLOSE_SESSION
 } from '../../types'
 
 
 const AuthState = ({ children }) => {
+    // Traer state de project para resolver el problema de "project" que no se anula al logout
+    const projectsContext = useContext(projectContext)
+    const { activeProject } = projectsContext
+
     const initialState = {
         token: localStorage.getItem('token'),
         user: null,
@@ -27,7 +37,7 @@ const AuthState = ({ children }) => {
     const handleRegisterUser = (data) => {
         (async () => {
             try {
-                const response = await registerUser(data)
+                await registerUser(data)
                 dispatch({
                     type: REGISTER_SUCCESS,
                     // payload: 
@@ -57,6 +67,10 @@ const AuthState = ({ children }) => {
                 })
                 // nos traemos al usuario que ya tendrá el token
                 handleRetrieveUser()
+                
+                // al loguear llamo a la función para que ponga a "project" en undefined. Esto evita
+                // que se carguen tasks del usuario anterior.
+                activeProject()
 
             } catch (error) {
                 const alert = {
@@ -83,15 +97,22 @@ const AuthState = ({ children }) => {
 
             try {
                 const response = await retrieveUser()
-
                 dispatch({
                     type: GET_USER,
                     payload: response.data
                 })
+
             } catch (error) {
                 console.log(error.response)
             }
         })()
+    }
+
+    // Function para logout.
+    const handleOnLogout = () => {
+        dispatch({
+            type: CLOSE_SESSION
+        })
     }
 
 
@@ -109,7 +130,8 @@ const AuthState = ({ children }) => {
                 message: state.message,
                 handleRegisterUser,
                 handleLogin,
-                handleRetrieveUser
+                handleRetrieveUser,
+                handleOnLogout
             }}>
             {children}
         </authContext.Provider>

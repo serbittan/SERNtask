@@ -4,7 +4,8 @@ import {
     ADD_PROJECT,
     FORM_VALIDATE,
     CURRENT_PROJECT,
-    REMOVE_PROJECT
+    REMOVE_PROJECT,
+    PROJECT_ERROR
 } from '../../types'
 
 
@@ -47,6 +48,12 @@ const projectReducer = (state, action) => {
                 ...state,
                 projects: state.projects.filter(project => project.id !== action.payload),
                 project: null
+            }
+
+        case PROJECT_ERROR:
+            return {
+                ...state,
+                message: action.payload
             }
         default:
             return state

@@ -1,6 +1,8 @@
 import React, { useReducer } from 'react'
 import { projectReducer, projectContext } from '.'
-import { nanoid } from 'nanoid'
+import { createProject, retrieveProjects, deleteProject } from '../../../logic'
+
+
 
 import { 
     SHOW_FORMPROJECT,
@@ -8,23 +10,18 @@ import {
     ADD_PROJECT,
     FORM_VALIDATE,
     CURRENT_PROJECT,
-    REMOVE_PROJECT
+    REMOVE_PROJECT,
+    PROJECT_ERROR
 } from '../../types'
 
 
 const ProjectState = ({ children }) => {
-    const projects = [
-        { id: 1, name: 'visual' },
-        { id: 2, name: 'color' },
-        { id: 3, name: 'desing IU' },
-        { id: 4, name: 'hosting' }
-    ]
-
     const initialState = {
         formproject : false,
         projects : [],
         errorform: false,
-        project: null
+        project: null,
+        message: null
     }
 
     const [state, dispatch] = useReducer(projectReducer, initialState)
@@ -38,19 +35,53 @@ const ProjectState = ({ children }) => {
 
     // Function que obtiene/trae los proyectos.
     const getProjects = () => {
-        dispatch({
-            type: GET_PROJECTS,
-            payload: projects
-        })
+        (async () => {
+            try {
+                const response = await retrieveProjects()
+                dispatch({
+                    type: GET_PROJECTS,
+                    payload: response.data
+                })
+            } catch (error) {
+                const alert = {
+                    msg: 'There was a mistake',
+                    category: 'alert-error'
+                }
+                dispatch({
+                    type: PROJECT_ERROR,
+                    payload: alert
+                })
+            }
+
+        })()
+               
     }
+                 
 
     // Function que añade un nuevo proyecto a la lista
     const addProject = project => {
-        project.id = nanoid()
-        dispatch({
-            type: ADD_PROJECT,
-            payload: project
-        })
+        (async () => {
+            try {
+                const response = await createProject(project)
+                dispatch({
+                    type: ADD_PROJECT,
+                    payload: response.data
+                })
+                // Llamar a los proyectos.
+                getProjects()
+
+            } catch (error) {
+                const alert = {
+                    msg: 'There was a mistake',
+                    category: 'alert-error'
+                }
+                dispatch({
+                    type: PROJECT_ERROR,
+                    payload: alert
+                })
+            }
+        })()
+        
     }
 
     // Function que muestra el error en el formproject
@@ -70,10 +101,25 @@ const ProjectState = ({ children }) => {
 
     // Function que elimina un proyecto.
     const removeProject = id => {
-        dispatch({
-            type: REMOVE_PROJECT,
-            payload: id
-        })
+        (async () => {
+            try {
+                await deleteProject(id)
+                dispatch({
+                    type: REMOVE_PROJECT,
+                    payload: id
+                })
+            } catch (error) {
+                const alert = {
+                    msg: 'There was a mistake',
+                    category: 'alert-error'
+                }
+                dispatch({
+                    type: PROJECT_ERROR,
+                    payload: alert
+                })
+            }
+        })()
+        
     }
 
 
@@ -84,6 +130,7 @@ const ProjectState = ({ children }) => {
                 projects: state.projects,
                 errorform: state.errorform,
                 project: state.project,
+                message: state.message,
                 showFormProject,
                 getProjects,
                 addProject,

@@ -4,6 +4,7 @@ import {
     GET_USER,
     LOGIN_SUCCESS,
     LOGIN_FAILED,
+    CLOSE_SESSION
 } from '../../types'
 
 
@@ -13,7 +14,7 @@ const authReducer = (state, action) => {
         case REGISTER_SUCCESS:
             return { 
                 ...state,
-                // token: null,
+                token: null,
                 authenticated: null,
                 registered: true
             }
@@ -29,6 +30,7 @@ const authReducer = (state, action) => {
             localStorage.setItem('token', action.payload.token)
             return {
                 ...state,
+                token: action.payload.token,
                 registered: true,
                 authenticated: true,
                 message: null
@@ -46,7 +48,20 @@ const authReducer = (state, action) => {
         case GET_USER:
             return {
                 ...state,
+                registered: true,
+                authenticated: true,
                 user: action.payload
+            }
+
+        case CLOSE_SESSION:
+            localStorage.removeItem('token')
+            return {
+                ...state,
+                user: null,
+                token: null,
+                message: action.payload,
+                authenticated: null,
+                registered: null
             }
 
         default:

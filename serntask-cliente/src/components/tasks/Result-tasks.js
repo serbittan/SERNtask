@@ -26,10 +26,10 @@ const ResultTasks = () => {
                 {tasksproject.length === 0 ?
                     (<li className="tarea"><p>No tasks yet!</p></li>)
                     :
-                    (tasksproject.map(task =>
+                    (tasksproject.map((task, index) =>
 
                         <ItemTask
-                            key={task.id}
+                            key={index}
                             task={task}
                         />)
                     )

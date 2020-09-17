@@ -4,10 +4,12 @@ import { authContext } from '../context/auth'
 const Header = () => {
     // Traer el state de auth.
     const authsContext = useContext(authContext)
-    const { user, handleRetrieveUser } = authsContext
+    const { user, handleRetrieveUser, handleOnLogout } = authsContext
 
     useEffect(() => {
         handleRetrieveUser()
+
+        // eslint-disable-next-line
     }, [])
     
 
@@ -16,7 +18,10 @@ const Header = () => {
                 {user && <p className="nombre-usuario">Hola <span>{user.name}</span></p>}
 
                 <nav className="nav-principal">
-                    <a  href="#!">Logout</a>
+                    <button
+                        className="btn cerrar-sesion"
+                        onClick={() => handleOnLogout()}
+                    >Logout</button> 
                 </nav>
 
         </header>
@@ -24,3 +29,5 @@ const Header = () => {
 }
  
 export default Header
+                        
+                    

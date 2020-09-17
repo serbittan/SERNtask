@@ -20,7 +20,9 @@ const Login = ({ history }) => {
         }
         if (message) {
             showAlert(message.msg, message.category)
+             
         }
+        // eslint-disable-next-line
     }, [authenticated, message, history])
 
     // Login state
@@ -48,17 +50,17 @@ const Login = ({ history }) => {
             showAlert('All fields are required', 'alert-error')
 
             return
-        } 
-        
+        }
+
         handleLogin(user)
     }
 
-    
+
     return (
         <div className="form-usuario">
             <div className="contenedor-form sombra-dark">
 
-            {alert && <Feedback message={alert.msg} level={alert.category} />}
+                {alert && <Feedback message={alert.msg} level={alert.category} />}
 
                 <h1>Login</h1>
                 <form

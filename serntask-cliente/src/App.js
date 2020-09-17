@@ -7,16 +7,17 @@ import { TaskState } from './components/context/tasks'
 import { AlertState } from './components/context/alerts'
 import { AuthState } from './components/context/auth'
 import tokenAuth from './config/token-auth'
+import PrivateRoute from './components/route/Private-route'
 
-
-function App() {
-
-  const token = localStorage.getItem('token') 
+// Revisar si tenemos un token. Esto me permite tener el token en headers siempre que este autenticado.
+// Solo añado este código en handleRetrieveUser y desde aquí lo manejo en el resto de lógicas.
+const token = localStorage.getItem('token') 
     if (token) {
       tokenAuth(token)
     }
-  
 
+    
+function App() {
   return (
     <ProjectState>
       <TaskState>
@@ -26,7 +27,7 @@ function App() {
               <Switch>
                 <Route exact path="/" component={Login} />
                 <Route exact path="/register" component={Register} />
-                <Route exact path="/projects" component={Projects} />
+                <PrivateRoute exact path="/projects" component={Projects} />
               </Switch>
             </Router>
           </AuthState>

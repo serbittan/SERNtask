@@ -1,13 +1,17 @@
 import React, { useContext } from 'react'
 import { taskContext } from '../context/tasks'
+import { projectContext } from '../context/projects'
 
 
 const ItemTask = ({ task }) => {
     const { name, status } = task
+    // Traer state de project.
+    const projectsContext = useContext(projectContext)
+    const { project } = projectsContext
 
     // Traer state de task.
     const tasksContext = useContext(taskContext)
-    const { statusTask, deleteTask, getTasks, taskSelected } = tasksContext
+    const { deleteTask, getTasks, taskSelected, handleUpdateTask, cleanTask } = tasksContext
 
     // Function para cambiar status.
     const handleOnStatus = task => {
@@ -16,44 +20,47 @@ const ItemTask = ({ task }) => {
         } else {
             task.status = true
         }
-        statusTask(task)
+        handleUpdateTask(task)
+        // statusTask(task)
     }
 
     // Funcion que elimina una task.
-    const handleDelete = task => {
-        deleteTask(task.id)
-        getTasks(task.projectId)
+    const handleDelete = id => {
+        deleteTask(id, project.id)
+        getTasks(project.id)
+
     }
 
     // Function que selecciona una task
     const handleOnSelectedTask = task => {
         taskSelected(task)
+
     }
 
 
-    return ( 
+    return (
         <li className="tarea sombra">
             <p>{name}</p>
 
             <div className="estado">
                 {status ?
-                (
-                    <button
-                        type="button"
-                        className="completo"
-                        onClick={() => handleOnStatus(task)}
-                    >Completed</button>
-                )
-                :
-                (
-                    <button
-                        type="button"
-                        className="incompleto"
-                        onClick={() => handleOnStatus(task)}
-                    >Incompleted</button>
-                )
-            }</div>
-            
+                    (
+                        <button
+                            type="button"
+                            className="completo"
+                            onClick={() => handleOnStatus(task)}
+                        >Completed</button>
+                    )
+                    :
+                    (
+                        <button
+                            type="button"
+                            className="incompleto"
+                            onClick={() => handleOnStatus(task)}
+                        >Incompleted</button>
+                    )
+                }</div>
+
             <div className="acciones">
                 <button
                     type="button"
@@ -64,12 +71,12 @@ const ItemTask = ({ task }) => {
                 <button
                     type="button"
                     className="btn btn-secundario"
-                    onClick={() => handleDelete(task)}
+                    onClick={() => handleDelete(task.id)}
                 >Delete</button>
             </div>
 
         </li>
-     )
+    )
 }
- 
+
 export default ItemTask

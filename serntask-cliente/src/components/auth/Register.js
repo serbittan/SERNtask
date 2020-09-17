@@ -4,7 +4,7 @@ import { Feedback } from '.'
 import { alertContext } from '../context/alerts'
 import { authContext } from '../context/auth'
 
-const Register = ( { history }) => {
+const Register = ({ history }) => {
     // Traer el state de auth.
     const authsContext = useContext(authContext)
     const { registered, message, handleRegisterUser } = authsContext
@@ -21,6 +21,7 @@ const Register = ( { history }) => {
         if (message) {
             showAlert(message.msg, message.category)
         }
+        // eslint-disable-next-line
     }, [history, message, registered])
 
     // Register state
@@ -49,15 +50,15 @@ const Register = ( { history }) => {
             showAlert('All fields are required', 'alert-error')
 
             return
-        } 
+        }
 
         // password 6 caracteres
         if (password.length < 6) {
             showAlert('the password must have a minimum of 6 characters', 'alert-error')
 
             return
-        } 
-            
+        }
+
         // password y confirm iguales
         if (password !== confirm) {
             showAlert('password should be equals', 'alert-error')

@@ -61,6 +61,7 @@ const FormProjects = () => {
                     type="text"
                     className="input-text"
                     name="name"
+                    autoFocus
                     placeholder="Project Name"
                     onChange={handleOnChange}
                     value={name}

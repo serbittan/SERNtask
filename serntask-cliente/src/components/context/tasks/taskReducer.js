@@ -2,7 +2,7 @@ import {
     GET_TASKS,
     ADD_TASK,
     TASK_VALIDATE,
-    STATUS_TASK,
+    // STATUS_TASK,
     DELETE_TASK,
     TASK_SELECTED,
     UPDATE_TASK,
@@ -15,12 +15,12 @@ const taskReducer = (state, action) => {
         case GET_TASKS:
             return {
                 ...state,
-                tasksproject: state.tasks.filter(task => task.projectId === action.payload)
+                tasksproject: action.payload
             }
         case ADD_TASK:
             return {
                 ...state,
-                tasks: [action.payload, ...state.tasks],
+                tasksproject: [action.payload, ...state.tasksproject],
                 errorTask: false
             }
         case TASK_VALIDATE:
@@ -29,16 +29,16 @@ const taskReducer = (state, action) => {
                 errorTask: true
             }
 
-        case STATUS_TASK:
-            return {
-                ...state,
-                task: action.payload
-            }
+        // case STATUS_TASK:
+        //     return {
+        //         ...state,
+        //         task: action.payload
+        //     }
 
         case DELETE_TASK:
             return {
                 ...state,
-                tasks: state.tasks.filter(task => task.id !== action.payload)
+                tasksproject: state.tasksproject.filter(task => task.id !== action.payload),
             }
 
         case TASK_SELECTED:
@@ -50,7 +50,7 @@ const taskReducer = (state, action) => {
         case UPDATE_TASK: 
             return {
                 ...state,
-                tasks: state.tasks.map(task => task.id === action.payload.id ? action.payload : task)
+                tasksproject: state.tasksproject.map(task => task.id === action.payload.id ? action.payload : task)
             }
 
         case CLEAN_TASK:

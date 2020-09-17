@@ -1,12 +1,12 @@
 import React, { useReducer } from 'react'
 import { taskReducer, taskContext } from '.'
-import { nanoid } from 'nanoid'
+import { createTask, deleteTasks, retrieveTasks, updateTask } from '../../../logic'
 
 import {
     GET_TASKS,
     ADD_TASK,
     TASK_VALIDATE,
-    STATUS_TASK,
+    // STATUS_TASK,
     DELETE_TASK,
     TASK_SELECTED,
     UPDATE_TASK,
@@ -15,15 +15,6 @@ import {
 
 const TaskState = ({ children }) => {
     const initialState = {
-        tasks : [
-            { id: 1, name: 'color calidos', status: false, projectId: 2 },
-            { id: 2, name: 'color ocres', status: true, projectId: 3 },
-            { id: 3, name: 'color turquesas', status: false, projectId: 3 },
-            { id: 4, name: 'main principal', status: true, projectId: 1 },
-            { id: 5, name: 'header luminoso', status: true, projectId: 4 },
-            { id: 6, name: 'acabados', status: false, projectId: 1 },
-            { id: 7, name: 'navegacion', status: false, projectId: 4 },
-        ],
         tasksproject: [],
         errorTask: false,
         taskselected: null
@@ -32,43 +23,67 @@ const TaskState = ({ children }) => {
     const [state, dispatch] = useReducer(taskReducer, initialState)
 
     // Function que obtiene las tasks de un project.
-    const getTasks = projectId => {
-        dispatch({
-            type: GET_TASKS,
-            payload: projectId
-        })
+    const getTasks = project => {
+        (async () => {
+            try {
+                const response = await retrieveTasks(project)
+                dispatch({
+                    type: GET_TASKS,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error.response)
+            }
+        })()
     }
+
 
     // Function para agregar nuevas tasks a un proyecto.
     const addTask = task => {
-        task.id = nanoid()
-        dispatch({
-            type: ADD_TASK,
-            payload: task
-        })
+        (async () => {
+            try {
+                await createTask(task)
+                dispatch({
+                    type: ADD_TASK,
+                    payload: task
+                })
+            } catch (error) {
+                console.log(error.response)
+            }
+        })()
     }
 
+
     // Function que valida el formtask
-    const taskError = () =>{
+    const taskError = () => {
         dispatch({
             type: TASK_VALIDATE
         })
     }
 
     // Function para modificar status de task.
-    const statusTask = task => {
-        dispatch({
-            type: STATUS_TASK,
-            payload: task
-        })
-    }
+    // La unificamos en una: status/edit => en handleUpdadeTask
+    // const statusTask = task => {
+    //     dispatch({
+    //         type: STATUS_TASK,
+    //         payload: task
+    //     })
+    // }
 
     // Function que elimina una task.
-    const deleteTask = taskId => {
-        dispatch({
-            type: DELETE_TASK,
-            payload: taskId
-        })
+    const deleteTask = (id, project) => {
+        (async () => {
+            try {
+                await deleteTasks(id, project)
+                dispatch({
+                    type: DELETE_TASK,
+                    payload: id
+                })
+            } catch (error) {
+                console.log(error.response)
+            }
+        })()
+
     }
 
     // Function que selecciona una tarea.
@@ -79,12 +94,20 @@ const TaskState = ({ children }) => {
         })
     }
 
+    
     // Function que actualiza una tarea o la edita.
-    const updateTask = task => {
-        dispatch({
-            type: UPDATE_TASK,
-            payload: task
-        })
+    const handleUpdateTask = task => {
+        (async () => {
+            try {
+                const response = await updateTask(task)
+                dispatch({
+                    type: UPDATE_TASK,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        })()
 
     }
 
@@ -95,25 +118,25 @@ const TaskState = ({ children }) => {
         })
     }
 
-    return ( 
+    return (
         <taskContext.Provider
             value={{
-                tasks: state.tasks,
+                // tasks: state.tasks,
                 tasksproject: state.tasksproject,
                 errorTask: state.errorTask,
                 taskselected: state.taskselected,
                 getTasks,
                 addTask,
                 taskError,
-                statusTask,
+                // statusTask,
                 deleteTask,
                 taskSelected,
-                updateTask,
+                handleUpdateTask,
                 cleanTask
             }}>
-            { children }
+            { children}
         </taskContext.Provider>
-     )
+    )
 }
- 
+
 export default TaskState

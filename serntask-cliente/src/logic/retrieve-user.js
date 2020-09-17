@@ -1,6 +1,6 @@
 import axiosClient from "../config/axios"
 
-const retrieveUser = () => { // necesito añadir el token por headers
+const retrieveUser = () => { 
     return (async () => {
         const response = await axiosClient.get('/users')
 

@@ -11,7 +11,7 @@ const FormTasks = () => {
 
     // Traer state de task.
     const tasksContext = useContext(taskContext)
-    const { taskselected, errorTask, addTask, getTasks, taskError, updateTask, cleanTask } = tasksContext
+    const { taskselected, errorTask, addTask, getTasks, taskError, handleUpdateTask, cleanTask } = tasksContext
 
     // State propio del form.
     const [task, setTask] = useState({
@@ -32,7 +32,8 @@ const FormTasks = () => {
     useEffect(() => {
         if (taskselected !== null) {
             setTask(taskselected)
-        }
+        } 
+        
     },[taskselected])
 
 
@@ -47,17 +48,17 @@ const FormTasks = () => {
             return
         }
         if (taskselected) {
-            updateTask(task)
+            handleUpdateTask(task)
 
-            getTasks(task.projectId)
+            getTasks(task.project)
 
             cleanTask()
         } else {
             // añadirle propiedades a newtask
-            task.projectId = project.id
-            task.status = false
+            task.project = project.id
+            // task.status = false
             addTask(task)
-            getTasks(task.projectId)
+            getTasks(task.project)
 
         }
 
@@ -78,6 +79,7 @@ const FormTasks = () => {
                         className="input-text"
                         placeholder="Task Name"
                         name="name"
+                        autoFocus
                         onChange={handleOnChange}
                         value={name}
                     />
@@ -86,7 +88,7 @@ const FormTasks = () => {
                     <input
                         type="submit"
                         className="btn btn-block btn-primario"
-                        value={taskselected ? "Edit Task" : "Add Task"}
+                        value={taskselected ? "Save Task" : "Add Task"}
                     />
                 </div>
             </form>}
