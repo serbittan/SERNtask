@@ -11,8 +11,6 @@ const retrieveTasks = (id, project) => {
 
         const tasks = await Task.find({ project }).lean()
 
-        if (!tasks.length) throw new Error('Not tasks yet!')
-
         tasks.forEach(task => {
             task.id = task._id.toString()
 

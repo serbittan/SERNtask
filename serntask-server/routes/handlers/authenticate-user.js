@@ -32,7 +32,6 @@ module.exports = (req, res) => {
                 res.status(400).json({ msg: error.message })
             })
     } catch (error) {
-        console.log(error)
         res.status(400).send('Hubo un error')
 
     }

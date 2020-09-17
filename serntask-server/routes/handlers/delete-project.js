@@ -3,7 +3,7 @@ const { deleteProject } = require('../../logic')
 
 module.exports = (req, res) => {
     const { payload: { sub: id }, params: { projectId } } = req
-
+    
     try {
         deleteProject(id, projectId)
             .then(() =>

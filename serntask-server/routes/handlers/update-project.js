@@ -9,18 +9,18 @@ module.exports = (req, res) => {
         return res.status(400).json({ errors: errors.array() })
     }
 
-    const { payload: { sub: id }, params: { projectId }, body: { name } } = req 
-    
+    const { payload: { sub: id }, params: { projectId }, body: { name } } = req
+
     try {
         updateProject(id, projectId, name)
-        .then(project => {
-            res.status(200).json(project)
-        })
-        .catch(error => {
-            res.status(404).json({ msg: error.message })
-        })
+            .then(project => {
+                res.status(200).json(project)
+            })
+            .catch(error => {
+                res.status(404).json({ msg: error.message })
+            })
     } catch (error) {
         res.status(500).send('Server Error')
     }
-    
+
 }
