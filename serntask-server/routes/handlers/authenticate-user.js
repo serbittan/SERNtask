@@ -29,7 +29,7 @@ module.exports = (req, res) => {
                 })
             })
             .catch(error => {
-                res.status(400).json({ msg: error.message })
+                res.status(404).json({ msg: error.message })
             })
     } catch (error) {
         res.status(400).send('Hubo un error')
