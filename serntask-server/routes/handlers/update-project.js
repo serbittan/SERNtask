@@ -10,7 +10,7 @@ module.exports = (req, res) => {
     }
 
     const { payload: { sub: id }, params: { projectId }, body: { name } } = req
-
+    
     try {
         updateProject(id, projectId, name)
             .then(project => {
