@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react'
 import { projectReducer, projectContext } from '.'
-import { createProject, retrieveProjects, deleteProject } from '../../../logic'
+import { createProject, retrieveProjects, deleteProject, updateProject } from '../../../logic'
 
 
 
@@ -11,7 +11,10 @@ import {
     FORM_VALIDATE,
     CURRENT_PROJECT,
     REMOVE_PROJECT,
-    PROJECT_ERROR
+    PROJECT_ERROR,
+    SELECTED_PROJECT,
+    UPDATE_PROJECT,
+    CLEAN_PROJECT
 } from '../../types'
 
 
@@ -21,6 +24,7 @@ const ProjectState = ({ children }) => {
         projects : [],
         errorform: false,
         project: null,
+        projectselected: null,
         message: null
     }
 
@@ -122,6 +126,51 @@ const ProjectState = ({ children }) => {
         
     }
 
+    // Function que selecciona un project para edición.
+    const selectedProject = project => {
+        
+        dispatch({
+            type: SELECTED_PROJECT,
+            payload: project
+        })
+    }
+
+    // Function que actualiza el nombre de un projecto.
+    const handleUpdateProject = project => {
+        (async () => {
+            try {
+                const response = await updateProject(project)
+                dispatch({
+                    type: UPDATE_PROJECT,
+                    payload: response.data
+                })
+                
+                // Function que setea el projectselected pasado unos segundos.
+                setTimeout(() => {
+                    cleanProject()
+                },1500)
+
+            } catch (error) {
+                const alert = {
+                    msg: 'There was a mistake',
+                    category: 'alert-error'
+                }
+                dispatch({
+                    type: PROJECT_ERROR,
+                    payload: alert
+                })
+            }
+
+        })()
+    }
+
+    // Function que limpia el projectselected después de actualizar proyecto.
+    const cleanProject = () => {
+        dispatch({
+            type: CLEAN_PROJECT
+        })
+    }
+
     
 
 
@@ -132,13 +181,17 @@ const ProjectState = ({ children }) => {
                 projects: state.projects,
                 errorform: state.errorform,
                 project: state.project,
+                projectselected: state.projectselected,
                 message: state.message,
                 showFormProject,
                 getProjects,
                 addProject,
                 formError,
                 activeProject,
-                removeProject
+                removeProject,
+                selectedProject,
+                handleUpdateProject,
+                cleanProject
             }}>
             { children }
         </projectContext.Provider>

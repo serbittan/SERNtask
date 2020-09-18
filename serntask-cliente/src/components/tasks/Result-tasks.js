@@ -50,7 +50,7 @@ const ResultTasks = () => {
                             key={index}
                             task={task}
                         />)
-                    )
+                    ).reverse()
                 }
             </ul>
             <ButtonRemove />

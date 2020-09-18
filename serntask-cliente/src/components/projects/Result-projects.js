@@ -12,7 +12,7 @@ const ResultProjects = () => {
 
     // Traer el state de project.
     const projectsContext = useContext(projectContext)
-    const { message, projects, getProjects } = projectsContext
+    const { projectselected, message, projects, getProjects } = projectsContext
 
 
     // Obtener projects cuando carga el componente.
@@ -23,7 +23,7 @@ const ResultProjects = () => {
         getProjects()
 
         // eslint-disable-next-line
-    }, [message])
+    }, [message, projectselected])
 
     if (projects.length === 0) return <p>Not Projects yet!!</p>
 
@@ -36,7 +36,7 @@ const ResultProjects = () => {
                     key={index}
                     project={project}
                 />
-            ))}
+            )).reverse()}
         </ul>
 
     )

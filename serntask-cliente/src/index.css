@@ -125,8 +125,10 @@ aside  {
   margin-top: 10rem;
 }
 .listado-proyectos li {
+  display: flex;
   margin-bottom: 2rem;
 }
+
 .listado-proyectos li a {
   font-size: 1.4rem;
   color: var(--gris2);
@@ -337,3 +339,16 @@ aside  {
   background-color:  rgb(230, 78, 78);
   color: var(--blanco);
 }
+
+/* icon fontawesome */
+
+/* .fa-pull-right {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: aliceblue;
+  background-color: #edd387;
+  border-radius: 13px;
+  margin: 0.3em;
+  width: 22em ;
+} */

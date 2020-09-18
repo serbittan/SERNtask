@@ -5,6 +5,7 @@ import retrieveUser from './retrieve-user'
 import createProject from './create-project'
 import retrieveProjects from './retrieve-projects'
 import deleteProject from './delete-project'
+import updateProject from './update-project'
 
 import createTask from './create-task'
 import retrieveTasks from './retrieve-tasks'
@@ -18,6 +19,7 @@ export {
     createProject,
     retrieveProjects,
     deleteProject,
+    updateProject,
     createTask,
     retrieveTasks,
     deleteTasks,

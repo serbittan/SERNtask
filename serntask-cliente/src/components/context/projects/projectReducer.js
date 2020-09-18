@@ -5,7 +5,10 @@ import {
     FORM_VALIDATE,
     CURRENT_PROJECT,
     REMOVE_PROJECT,
-    PROJECT_ERROR
+    PROJECT_ERROR,
+    SELECTED_PROJECT,
+    UPDATE_PROJECT,
+    CLEAN_PROJECT
 } from '../../types'
 
 
@@ -20,13 +23,13 @@ const projectReducer = (state, action) => {
         case GET_PROJECTS:
             return {
                 ...state,
-                projects: action.payload
+                projects: action.payload,
             }
 
         case ADD_PROJECT:
             return {
                 ...state,
-                projects: [ action.payload, ...state.projects],
+                projects: [ ...state.projects, action.payload],
                 formproject: false,
                 errorform: false
             }
@@ -54,6 +57,27 @@ const projectReducer = (state, action) => {
             return {
                 ...state,
                 message: action.payload
+            }
+
+        case SELECTED_PROJECT:
+            return {
+                ...state,
+                formproject: true,
+                projectselected: action.payload,
+                project: null
+            }
+
+        case UPDATE_PROJECT:
+            return {
+                ...state,
+                projectselected: action.payload,
+                formproject: false 
+            }
+
+        case CLEAN_PROJECT:
+            return {
+                ...state,
+                projectselected: null
             }
 
         default:

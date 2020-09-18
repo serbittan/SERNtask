@@ -1,11 +1,21 @@
-import React, { Fragment, useState, useContext } from 'react'
+import React, { Fragment, useState, useContext, useEffect } from 'react'
 import { projectContext } from '../context/projects'
 
 
 
 const FormProjects = () => {
     const projectsContext = useContext(projectContext)
-    const { formproject, errorform, showFormProject, addProject, formError } = projectsContext
+    const { projectselected, formproject, errorform, showFormProject, addProject, formError, handleUpdateProject, cleanProject } = projectsContext
+
+    useEffect(() => {
+        if (projectselected ) {
+            setProject (projectselected)
+         
+        } 
+        
+    }, [projectselected])
+
+
     // Form state
     const [project, setProject] = useState({
         name: ''
@@ -31,16 +41,28 @@ const FormProjects = () => {
 
             return
         }
-        // agregar al state
-        addProject(project)
-        // setear campos
-        setProject({
-            name: ''
-        })
+        if (projectselected !== null) {
+            handleUpdateProject(project)
+            
+        } else {
+            // agregar al state
+            addProject(project)
+        }
+        // // setear campos (acción que pasamos al clickar nuevo proyecto)
+        // setProject({
+        //     name: ''
+        // })
     }
 
     // Cuando user clicka un nuevo proyecto
     const handleOnClick = () => {
+        // evitamos tener projectselected activo. 
+        cleanProject()
+        // evitamos que haya algun input previo
+        setProject({
+            name: ''
+        })
+        // abrimos el form
         showFormProject()
     }
 
@@ -70,7 +92,7 @@ const FormProjects = () => {
                 <input
                     type="submit"
                     className="btn btn-block btn-primario"
-                    value="Add Project"
+                    value={ projectselected ? "Save Project" : "Add Project"}
                 />
 
             </form>}

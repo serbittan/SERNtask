@@ -78,6 +78,7 @@ const FormTasks = () => {
         <div className="formulario">
             {project && <form
                     onSubmit={handleOnSubmit}>
+                        
                 <div className="contenedor-input">
                     <input
                         type="text"
