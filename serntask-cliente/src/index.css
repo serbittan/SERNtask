@@ -1,12 +1,21 @@
 :root {
   --blanco: #ffffff;
+  --gris1: whitesmoke;
+  --gris2: #ff815e;
+  --gris3: #1a202d;
+  --negro: #000000;
+  --headingFont:'Raleway', sans-serif;
+  --textFont:  'Roboto', sans-serif;
+}
+/* :root {
+  --blanco: #ffffff;
   --gris1: #edf2f6;
   --gris2: #2f3848;
   --gris3: #1a202d;
   --negro: #000000;
   --headingFont:'Raleway', sans-serif;
   --textFont:  'Roboto', sans-serif;
-}
+} */
 *, *:before, *:after {
   box-sizing: inherit;
 } 
@@ -29,7 +38,8 @@ h1, h2 {
   font-weight: 900;
   margin: 0 0 4rem 0;
   text-align: center;
-  color: var(--gris2);
+  color: var(--gris);
+  /* color: var(--gris2); */
 }
 h1 span {
   font-weight: 400;
@@ -72,7 +82,8 @@ a {
   background: var(--gris3);
 }
 .btn-secundario {
-  background-color: var(--gris1);
+  background-color: gray;
+  /* background-color: var(--gris1); */
 }
 .btn-block {
   display: block;
@@ -116,7 +127,8 @@ aside  {
 .formulario-nuevo-proyecto .input-text {
   border-bottom: 1px solid var(--gris2);
   border-radius: 0;
-  background-color: var(--gris1);
+  background-color: var(--blanco);
+  /* background-color: var(--gris1); */
 }
 .formulario-nuevo-proyecto .input-text::placeholder{
   color: var(--gris2);
@@ -251,11 +263,11 @@ aside  {
 }
 .completo,
 .correcto {
-  background-color: rgba(154, 252, 154, .3);
+  background-color: rgba(17, 236, 17, 0.897);
   color: var(--gris3);
 }
 .incompleto{
-  background-color: rgba(255, 178, 178, .4);
+  background-color: rgba(240, 32, 32, 0.801);
   color: var(--gris3);
 }
 .error {
@@ -342,13 +354,7 @@ aside  {
 
 /* icon fontawesome */
 
-/* .fa-pull-right {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  background-color: aliceblue;
-  background-color: #edd387;
-  border-radius: 13px;
-  margin: 0.3em;
-  width: 22em ;
-} */
+.fa-pencil-alt:before {
+  content: "\f303";
+  padding: 0.5rem;
+}
