@@ -7,7 +7,7 @@ const registerUser = (name, email, password) => {
     return (async () => {
         let user = await User.findOne({ email })
 
-        if (user) throw new Error('El usuario ya existe')
+        if (user) throw new Error('user already exist')
 
         const validPassword = await bcrypt.hash(password, 10)
 
