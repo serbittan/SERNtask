@@ -4,8 +4,8 @@
   "description": "serntask server",
   "main": "index.js",
   "scripts": {
-    "test": "npx mocha logic utils",
-    "test-debug": "npx mocha debug logic utils",
+    "test": "./node_modules/.bin/mocha ./logic",
+    "test-debug": "npx mocha debug",
     "start": "node .",
     "watch": "nodemon ."
   },

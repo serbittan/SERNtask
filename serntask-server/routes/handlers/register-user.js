@@ -21,7 +21,7 @@ module.exports = (req, res) => {
             })
 
     } catch (error) {
-        res.status(400).send('Hubo un error')
+        res.status(400).send('There was a mistake')
     }
 }
 

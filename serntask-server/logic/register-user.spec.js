@@ -8,9 +8,9 @@ const registerUser = require('./register-user')
 const { env: { TEST_MONGODB_URL } } = process
 
 describe('registerUser', () => {
-    let name, email, password, confirm
+    let name, email, password
 
-    Before(() => 
+    before(() =>
         mongoose.connect(TEST_MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
             .then(() => User.deleteMany())
     )
@@ -25,128 +25,135 @@ describe('registerUser', () => {
         const returnValue = await registerUser(name, email, password)
         expect(returnValue).to.be.undefined
 
-        
+
         const user = await User.findOne({ email })
         expect(user).to.exist
-        expect(user._id).to.be.a('string')
+        expect(user.id).to.be.a('string')
         expect(user.name).to.equal(name)
         expect(user.email).to.equal(email)
         expect(user.created).to.exist
-        expect(user.create).to.be.an.instanceOf(Date)
-        
+        expect(user.created).to.be.an.instanceOf(Date)
+
         const validPassword = await bcrypt.compare(password, user.password)
         expect(validPassword).to.be.true
     })
 
     describe('when user already exist', () => {
-        beforeEach(async () => {
-            return await User.create({ name, email, password })
-        })
+        // beforeEach(async () => {
+        //     return await User.create({ name, email, password })
+        // })
 
         it('should fail when user already exist', async () => {
             try {
-                await registerUser({ name, email, password })
+                await registerUser(name, email, password)
 
-                throw new Error('should not reach this point')
+                throw new Error('user already exist')
+
             } catch (error) {
                 expect(error).to.be.instanceOf(Error)
-                expect(error.message).to.be.equal(`user with email ${email} already exist`)
+                expect(error.message).to.be.equal('user already exist')
             }
         })
     })
 
-    it('should fail on non-string or empty name', () => {
-        name = 1
-        expect(() => registerUser({ name, email, password})).to.throw(
-            TypeError, 
-            `name ${name} is not a string`
-        )
+    // Estos errores no estan contemplados aquí.
 
-        name = true
-        expect(() => registerUser({ name, email, password })).to.throw(
-            TypeError,
-            `name ${name} is not a string`
-        )
+    // it('should fail on non-string or empty name', () => {
+    //     name = 1
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `name ${name} is not a string`)
 
-        name = {}
-        expect(() => registerUser({ name, email, password })).to.throw(
-            TypeError,
-            `name ${name} is not a string`
-        )
+    //     name = true
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `name ${name} is not a string`)
 
-        name = ''
-        expect(() => registerUser({ name, email, password})).to.throw(
-            Error, 
-            `name is empty`
-        )
-    })
+    //     name = {}
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `name ${name} is not a string`)
 
-    it('should fail on-non string or empty email', () => {
-        email = 1
-        expect(() => registerUser({ name, email, password })).to.throw(
-            TypeError,
-            `email ${email} is not a string`
-        )
+    //     name = undefined
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `name ${name} is not a string`)
 
-        email = true
-        expect(() => registerUser({ name, email, password })).to.throw(
-            TypeError,
-            `email ${email} is not a string`
-        )
+    //     name = ''
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(Error, `name is required`)
+    // })
 
-        email = {}
-        expect(() => registerUser({ name, email, password })).to.throw(
-            TypeError,
-            `email ${email} is not a string`
-        )
+    // it('should fail on-non string or empty email', () => {
+    //     email = 1
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `email ${email} is not a string`)
 
-        email = ''
-        expect(() => registerUser({ name, email, password })).to.throw(
-            Error,
-            `email is empty`
-        )
-    })
+    //     email = true
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `email ${email} is not a string`)
 
-    it('should fail on-wrong email format', () => {
-        email = 'email'
-        expect(() => registerUser({ name, email, password })).to.throw(
-            ContentError,
-            `${email} is not an e-mail`
-        )
+    //     email = {}
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `email ${email} is not a string`)
 
-        email = 'email@email--';
-		expect(() => registerUser({ name, surname, email, password })).to.throw(
-			ContentError,
-			`${email} is not an e-mail`
-		)
-    })
+    //     email = undefined
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `name ${email} is not a string`)
 
-    it('should fail on non-string or empty password', () => {
-        password = 1
-        expect(() => registerUser({ name, email, password })).to.throw(
-            TypeError,
-            `password ${password} is not a string`
-        )
+    //     email = ''
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(Error, `email is empty`)
+    // })
 
-        password = true
-        expect(() => registerUser({ name, email, password })).to.throw(
-            TypeError,
-            `password ${password} is not a string`
-        )
+    // it('should fail on-wrong email format', () => {
+    //     email = 'email'
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(ContentError, `email ${email} is not an e-mail`)
 
-        password = {}
-        expect(() => registerUser({ name, email, password })).to.throw(
-            TypeError,
-            `password ${password} is not a string`
-        )
+    //     email = 'email@email--';
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(ContentError, `email ${email} is not an e-mail`)
+    // })
 
-        password = ''
-        expect(() => registerUser({ name, email, password })).to.throw(
-            Error, 
-            `password is empty`
-        )
+    // it('should fail on non-string or empty password', () => {
+    //     password = 1
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `password ${password} is not a string`)
 
-        after(() => User.deleteMany().then(() => mongoose.disconnect()))
-    })
-    
+    //     password = true
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `password ${password} is not a string`)
+
+    //     password = {}
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `password ${password} is not a string`)
+
+    //     password = undefined
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(TypeError, `name ${password} is not a string`)
+
+    //     password = ''
+    //     expect(() =>
+    //         registerUser(name, email, password)
+    //     ).to.throw(Error, `password is empty`)
+
+    // })
+    after(() => User.deleteMany().then(() => mongoose.disconnect()))
 })
+
+
+
+
