@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./logic",
-    "test-debug": "npx mocha debug",
+    "test-debug": "./node_modules/.bin/mocha debug ./logic",
     "start": "node .",
     "watch": "nodemon ."
   },

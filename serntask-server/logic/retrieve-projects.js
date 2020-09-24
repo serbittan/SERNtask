@@ -13,7 +13,6 @@ const retrieveProjects = (id) => {
             delete project._id
             delete project.__v
         })
-
         return projects
 
     })()

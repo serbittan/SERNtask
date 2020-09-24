@@ -12,7 +12,7 @@ const createProject = (id, name) => {
 
         project.creator = id
 
-        return project.save()
+        await project.save()
 
 
     })()
