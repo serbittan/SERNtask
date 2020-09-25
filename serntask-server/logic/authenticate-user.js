@@ -8,7 +8,7 @@ const authenticateUser = (email, password) => {
     return (async () => {
         const user = await User.findOne({ email })
 
-        if (!user) throw new Error(`El usuario con email: ${email} no existe`)
+        if (!user) throw new Error(`User with email: ${email} do not exist`)
 
         const validPassword = await bcrypt.compare(password, user.password)
 
