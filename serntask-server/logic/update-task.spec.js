@@ -1,17 +1,21 @@
 require('dotenv').config()
 const { expect } = require('chai')
-const { env: { TEST_MONGODB_URL } } = process
 const { mongoose, models: { User, Project, Task } } = require('serntask-data')
-
+const { env: { TEST_MONGODB_URL } } = process
 const { random } = Math
-const retrieveTasks = require('./retrieve-tasks')
+
+const updateTask = require('./update-task')
 
 
-describe('retrieveTasks', () => {
+describe('updateTask', () => {
+    // status será true o false de forma aleatoria
+    let statusUpdate = Math.floor(Math.random() * 2)
+
+
     before(async () => {
         await mongoose.connect(TEST_MONGODB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useNewUrlParser: true
         })
         await [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
     })
@@ -24,52 +28,18 @@ describe('retrieveTasks', () => {
         projectName = `projectName-${random()}`
 
         taskName = `taskName-${random()}`
+        status = statusUpdate === 0 ? true : false
     })
 
-    describe('when user and project exist', () => {
+    describe('when user and project and task exist', () => {
         let id, _project, taskId
 
         beforeEach(async () => {
-            // creamos user.
-            const user = await User.create({ name, email, password })
+            // crear user.
+            const user = await User.create({ name, email, password})
             id = user.id
 
-            // creamos project.
-            const project = await Project({ name: projectName })
-            _project = project.id
-
-            project.creator = id
-
-            await project.save()
-
-            // creamos una task.
-            const task = await Task.create({ name: taskName, project: _project })
-            taskId = task.id
-        })
-
-        it('should succeed in retrieve all tasks', async () => {
-            const tasks = await retrieveTasks(id, _project)
-  
-            expect(tasks).to.exist
-            expect(tasks).to.be.an('array')
-            expect(tasks[0].id).to.be.exist
-            expect(tasks[0].id).to.be.a('string')
-            expect(tasks[0].name).to.be.equal(taskName)
-            expect(tasks[0].status).to.be.false
-            expect(tasks[0].project.toString()).to.be.equal(_project)
-            expect(tasks[0].date).to.be.an.instanceOf(Date)
-        })
-    })
-
-    describe('when user does not exist', () => {
-        let id, _project, taskId
-
-        beforeEach(async () => {
-            // creamos user.
-            const user = await User.create({ name, email, password })
-            id = user.id
-
-            // creamos project.
+            // crear project.
             const project = await Project.create({ name: projectName })
             _project = project.id
 
@@ -77,22 +47,58 @@ describe('retrieveTasks', () => {
 
             await project.save()
 
-            // creamos task.
-            const task = await Task.create({ name: taskName, project: _project })
+            // crear task.
+            const task = await Task.create({ name: taskName })
             taskId = task.id
-
-            // eliminamos user.
-            await User.deleteMany()
         })
 
+        it('should succeed in update new task', async () => {
+            const update = await updateTask(id, _project, taskId, taskName, status)
+           
+            expect(update).to.be.exist
+            expect(update).to.be.an.instanceOf(Object)
+            expect(update).to.be.an('object')
+
+            expect(update.id).to.be.equal(taskId)
+            expect(update.name).to.be.equal(taskName)
+            expect(update.status).to.be.exist
+            expect(update.status).to.be.equal(status)
+            
+        })
+    })
+
+    describe('when user does not exist', () => {
+        let id, _project, taskId
+
+        beforeEach(async () => {
+            // crear user.
+            const user = await User.create({ name, email, password })
+            id = user.id
+
+            // crear project.
+            const project = await Project.create({ name: projectName })
+            _project = project.id
+
+            project.creator = id
+
+            await project.save()
+
+            // crear task.
+            const task = await Task.create({ name: taskName })
+            taskId = task.id
+
+            // eliminar user.
+            await User.deleteMany()
+        })
         it('should fail and throw', async () => {
             try {
-                const tasks = retrieveTasks(id, _project)
+                const update = await updateTask(id, _project, taskId, taskName, status)
                 throw new Error('Not authorized')
+
             } catch (error) {
-                expect(error).to.exist
+                expect(error).to.be.exist
                 expect(error).to.be.an.instanceOf(Error)
-                expect(error.message).to.equal('Not authorized')
+                expect(error.message).to.be.equal('Not authorized')
             }
         })
     })
@@ -101,11 +107,11 @@ describe('retrieveTasks', () => {
         let id, _project, taskId
 
         beforeEach(async () => {
-            // creamos user.
+            // crear user.
             const user = await User.create({ name, email, password })
             id = user.id
 
-            // creamos project.
+            // crear project.
             const project = await Project.create({ name: projectName })
             _project = project.id
 
@@ -113,21 +119,20 @@ describe('retrieveTasks', () => {
 
             await project.save()
 
-            // creamos task.
-            const task = await Task.create({ name: taskName, project: _project })
+            // crear task.
+            const task = await Task.create({ name: taskName })
             taskId = task.id
 
-            // eliminamos project.
+            // eliminar project.
             await Project.deleteMany()
         })
-
         it('should fail and throw', async () => {
             try {
-                const tasks = retrieveTasks(id, _project)
+                const update = await updateTask(id, _project, taskId, taskName, status)
                 throw new Error(`project with id: ${_project} not found`)
 
             } catch (error) {
-                expect(error).to.exist
+                expect(error).to.be.exist
                 expect(error).to.be.an.instanceOf(Error)
                 expect(error.message).to.be.equal(`project with id: ${_project} not found`)
             }
@@ -138,5 +143,4 @@ describe('retrieveTasks', () => {
         await [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
         await mongoose.disconnect()
     })
-            
 })
