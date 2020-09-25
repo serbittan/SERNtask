@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for create-task.spec.js</title>
+    <title>Code coverage report for update-project.spec.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="index.html">All files</a> create-task.spec.js</h1>
+        <h1><a href="index.html">All files</a> update-project.spec.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.55% </span>
+                <span class="strong">98.51% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>68/69</span>
+                <span class='fraction'>66/67</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.55% </span>
+                <span class="strong">98.51% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>68/69</span>
+                <span class='fraction'>66/67</span>
             </div>
         
             
@@ -186,17 +186,9 @@
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,8 +196,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -219,8 +213,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -232,7 +224,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -244,12 +235,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -329,22 +317,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">require('dotenv').config()
 const { expect } = require('chai')
+const { mongoose, models: { User, Project } } = require('serntask-data')
 const { env: { TEST_MONGODB_URL } } = process
-const { mongoose, models: { User, Project, Task } } = require('serntask-data')
-&nbsp;
 const { random } = Math
-const createTask = require('./create-task')
 &nbsp;
-describe('createTask', () =&gt; {
-    let name, email, password, projectName
+const updateProject = require('./update-project')
+&nbsp;
+&nbsp;
+describe('updateProject', () =&gt; {
+    // estas variables son para el testeo syncrono.(No tiene serntido definirlas si no existe ese test)
 &nbsp;
     before(async () =&gt; {
         await mongoose.connect(TEST_MONGODB_URL, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true
+            useNewUrlParser: true, 
+            useUnifiedTopology: true
         })
-        
-        await [Project.deleteMany(), Project.deleteMany(), Task.deleteMany()]
+        await [User.deleteMany(), Project.deleteMany()]
     })
 &nbsp;
     beforeEach(() =&gt; {
@@ -353,12 +341,10 @@ describe('createTask', () =&gt; {
         password = `password-${random()}`
 &nbsp;
         projectName = `projectName-${random()}`
-&nbsp;
-        taskName = `taskName-${random()}`
     })
 &nbsp;
     describe('when user and project exist', () =&gt; {
-        let _id, _project
+        let _id, projectId
 &nbsp;
         beforeEach(async () =&gt; {
             // crear user.
@@ -367,58 +353,54 @@ describe('createTask', () =&gt; {
 &nbsp;
             // crear project.
             const project = await Project.create({ name: projectName })
-            
-            _project = project.id
+            projectId = project.id
 &nbsp;
             project.creator = _id
 &nbsp;
             await project.save()
         })
 &nbsp;
-        it('should succeed in create a new task', async () =&gt; {
-            const returnValue = await createTask(_id, taskName, _project)
+        it('should succeed when update project', async () =&gt; {
+            const update = await updateProject(_id, projectId, projectName)
+           
+            expect(update).to.exist
+            expect(update).to.be.an.instanceOf(Object)
+            expect(update).to.be.an('object')
 &nbsp;
-            expect(returnValue).to.be.undefined
-&nbsp;
-            // buscamos la tarea creada.
-            const task = await Task.findOne({ project: _project })
-            
-            expect(task).to.exist
-            expect(task).to.be.an.instanceOf(Object)
-            expect(task.id).to.be.an('string')
-            expect(task.name).to.be.equal(taskName)
-            expect(task.project.toString()).to.be.equal(_project)
-            expect(task.status).to.be.false
+            expect(update.id).to.be.exist
+            expect(update.name).to.be.equal(projectName)
+            expect(update.creator.toString()).to.be.equal(_id)
+            expect(update.created).to.be.an.instanceOf(Date)
         })
     })
 &nbsp;
     describe('when user does not exist', () =&gt; {
-        let _id , _project
+        let _id, projectId
 &nbsp;
         beforeEach(async () =&gt; {
-            // creamos user
+            // crear user.
             const { id } = await User.create({ name, email, password })
             _id = id
 &nbsp;
-            // creamos project.
+            // crear project.
             const project = await Project.create({ name: projectName })
-            _project = project.id
+            projectId = project.id
 &nbsp;
             project.creator = _id
 &nbsp;
             await project.save()
 &nbsp;
-            // eliminamos el user
+            // eliminar user
             await User.deleteMany()
         })
 &nbsp;
         it('should fail and throw', async () =&gt; {
             try {
-                await createTask(_id, taskName, _project)
+                const update = await updateProject(_id, projectId, projectName)
                 throw new Error('Not authorized')
 &nbsp;
             } catch (error) {
-                expect(error).to.be.exist
+                expect(error).to.exist
                 expect(error).to.be.an.instanceOf(Error)
                 expect(error.message).to.be.equal('Not authorized')
             }
@@ -426,40 +408,40 @@ describe('createTask', () =&gt; {
     })
 &nbsp;
     describe('when project does not exist', () =&gt; {
-        let id, _project
+        let _id, projectId
 &nbsp;
         beforeEach(async () =&gt; {
-            // creamos user
-            const user = await User.create({ name, email, password })
-            id = user.id
+            // crear user.
+            const { id } = await User.create({ name, email, password })
+            _id = id
 &nbsp;
-            // creamos project.
+            // crear project.
             const project = await Project.create({ name: projectName })
-            _project = project.id
+            projectId = project.id
 &nbsp;
-            project.creator = id
+            project.creator = _id
 &nbsp;
             await project.save()
 &nbsp;
-            // eliminamos el project
+            // eliminar project
             await Project.deleteMany()
         })
 &nbsp;
         it('should fail and throw', async () =&gt; {
             try {
-                await createTask(id, taskName, _project)
-<span class="cstat-no" title="statement not covered" >                throw new Error(`Project with id ${_project} not found`)</span>
+                const update = await updateProject(_id, projectId, projectName)
+<span class="cstat-no" title="statement not covered" >                throw new Error('Project not found')</span>
 &nbsp;
             } catch (error) {
-                expect(error).to.be.exist
+                expect(error).to.exist
                 expect(error).to.be.an.instanceOf(Error)
-                expect(error.message).to.be.equal(`Project with id ${_project} not found`)
+                expect(error.message).to.be.equal('Project not found')
             }
         })
     })
 &nbsp;
     after(async () =&gt; {
-        await [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
+        await [User.deleteMany(), Project.deleteMany()]
         await mongoose.disconnect()
     })
 })</pre></td></tr></table></pre>
