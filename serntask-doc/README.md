@@ -22,9 +22,9 @@
 
 ## Code Coverage
 
-<!-- ### Server Side -->
+### Server Side 
 
-<!-- ![code coverage](./images/code-coverage.png) -->
+![code coverage](./images/codecoverage-serntask.png)
 
 
 ### Data Model
@@ -40,5 +40,4 @@ JavaScript, ReactJS, Node.js, Express, MongoDB, Mongoose. Testing: Jest & Mocha/
 
 
 
-- Testing in process.
-- Code Coverage
+- Testing in serntask-cliente in process.
