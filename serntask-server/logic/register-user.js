@@ -12,7 +12,7 @@ const registerUser = (name, email, password) => {
         const validPassword = await bcrypt.hash(password, 10)
 
         user = await new User({ name, email, password : validPassword })
-
+        
         await user.save()
 
     })()

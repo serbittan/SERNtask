@@ -7,7 +7,6 @@ import tokenAuth from '../../../config/token-auth'
 // traemos el context de project y probamos lo siguiente:
 import { projectContext } from '../projects'
 
-
 import {
     REGISTER_SUCCESS,
     REGISTER_FAILED,
@@ -17,6 +16,7 @@ import {
     CLOSE_SESSION,
     CLEAN_MESSAGE
 } from '../../types'
+
 
 
 const AuthState = ({ children }) => {

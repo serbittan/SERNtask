@@ -23,13 +23,13 @@ module.exports = (req, res) => {
                     expiresIn: JWT_EXP
                 }, (error, token) => {
                     if (error) throw error
-
+                    
                     // mensage de confirmación.
                     res.status(200).send({ token })
                 })
             })
             .catch(error => {
-                res.status(404).json({ msg: error.message })
+                res.status(401).json({ msg: error.message })
             })
     } catch (error) {
         res.status(400).send('Hubo un error')
