@@ -15,13 +15,18 @@ describe('updateProject', () => {
             useNewUrlParser: true, 
             useUnifiedTopology: true
         })
-        await [User.deleteMany(), Project.deleteMany()]
+        
+        return [User.deleteMany(), Project.deleteMany()]
     })
 
     beforeEach(() => {
         name = `name-${random()}`
         email = `email-${random()}@mail.com`
         password = `password-${random()}`
+
+        name2 = `name2-${random()}`
+        email2 = `email2-${random()}@mail.com`
+        password2 = `password2-${random()}`
 
         projectName = `projectName-${random()}`
     })
@@ -32,10 +37,11 @@ describe('updateProject', () => {
         beforeEach(async () => {
             // crear user.
             const { id } = await User.create({ name, email, password })
-            _id = id
 
+            _id = id
             // crear project.
             const project = await Project.create({ name: projectName })
+
             projectId = project.id
 
             project.creator = _id
@@ -57,30 +63,32 @@ describe('updateProject', () => {
         })
     })
 
-    describe('when user does not exist', () => {
-        let _id, projectId
+    describe('when user and project-user are not the same', () => {
+        let _id, _id2, projectId
 
         beforeEach(async () => {
             // crear user.
-            const { id } = await User.create({ name, email, password })
-            _id = id
+            const user = await User.create({ name, email, password })
 
+            _id = user.id
+            // crear user2.
+            const user2 = await User.create({ name: name2, email: email2, password: password2})
+
+            _id2 = user2.id
             // crear project.
             const project = await Project.create({ name: projectName })
+
             projectId = project.id
 
             project.creator = _id
 
             await project.save()
-
-            // eliminar user
-            await User.deleteMany()
         })
 
         it('should fail and throw', async () => {
             try {
-                const update = await updateProject(_id, projectId, projectName)
-                throw new Error('Not authorized')
+                const update = await updateProject(_id2, projectId, projectName)
+                throw new Error('you should not reach this point')
 
             } catch (error) {
                 expect(error).to.exist
@@ -113,7 +121,7 @@ describe('updateProject', () => {
         it('should fail and throw', async () => {
             try {
                 const update = await updateProject(_id, projectId, projectName)
-                throw new Error('Project not found')
+                throw new Error('you should not reach this point')
 
             } catch (error) {
                 expect(error).to.exist
@@ -124,7 +132,7 @@ describe('updateProject', () => {
     })
 
     after(async () => {
-        await [User.deleteMany(), Project.deleteMany()]
-        await mongoose.disconnect()
+        [User.deleteMany(), Project.deleteMany()]
+        return await mongoose.disconnect()
     })
 })

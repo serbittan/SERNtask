@@ -16,7 +16,7 @@ describe('retrieveProjects', () => {
             useUnifiedTopology: true
         })
 
-        await [User.deleteMany(), Project.deleteMany()]
+        return [User.deleteMany(), Project.deleteMany()]
     })
 
     beforeEach(() => {
@@ -37,6 +37,7 @@ describe('retrieveProjects', () => {
             id = user.id
             // creamos un project
             const project = await Project.create({ name: projectName })
+
             projectId = project.id
 
             project.creator = id
@@ -59,74 +60,8 @@ describe('retrieveProjects', () => {
 
     })
 
-    describe('when user does not exist', () => {
-        let _id, projectId
-
-        beforeEach(async () => {
-            // creamos user.
-            const { id } = await User.create({ name, email, password })
-            _id = id
-
-            // creamos project.
-            const project = await Project.create({ name: projectName })
-            projectId = project.id
-
-            project.creator = _id
-
-            await project.save()
-
-            // eliminamos el user.
-            await User.deleteMany()
-
-        })
-
-        it('should be fail and throw', async () => {
-            try {
-                const projects = await retrieveProjects(_id, projectId)
-                throw new Error('no projects')
-            } catch (error) {
-                expect(error).to.be.exist
-                expect(error).to.be.an.instanceOf(Error)
-                expect(error.message).to.be.equal('no projects')
-            }
-        })
-    })
-
-    describe('when project does not exist', () => {
-        let _id, projectId
-
-        beforeEach(async () => {
-            // creamos user.
-            const { id } = await User.create({ name, email, password })
-            _id = id
-
-            // creamos project.
-            const project = await Project.create({ name: projectName })
-            projectId = project.id
-
-            project.creator = _id
-
-            await project.save()
-
-            // eliminamos el project.
-            await Project.deleteMany()
-
-        })
-
-        it('should be fail and throw', async () => {
-            try {
-                const projects = await retrieveProjects(_id, projectId)
-                throw new Error('no projects')
-            } catch (error) {
-                expect(error).to.be.exist
-                expect(error).to.be.an.instanceOf(Error)
-                expect(error.message).to.be.equal('no projects')
-            }
-        })
-    })
-
     after(async () => {
-        await [User.deleteMany(), Project.deleteMany()]
-        await mongoose.disconnect()
+        [User.deleteMany(), Project.deleteMany()]
+        return await mongoose.disconnect()
     })
 })

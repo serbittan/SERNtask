@@ -13,8 +13,12 @@ describe('authenticateUser', () => {
 	let name, email, password
 
 	before(async () => {
-		await mongoose.connect(TEST_MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-		await User.deleteMany()
+		await mongoose.connect(TEST_MONGODB_URL, {
+			useNewUrlParser: true, 
+			useUnifiedTopology: true 
+		})
+
+		return await User.deleteMany()
 	})
 
 	beforeEach(() => {
@@ -44,37 +48,25 @@ describe('authenticateUser', () => {
 			expect(id.length).to.be.greaterThan(0)
 		})
 
-		it('should fail on incorrect email', async () => {
-			let wrongEmail = 'userdlrjl'
-
-			try {
-				await authenticateUser(wrongEmail, password)
-				throw new Error(`User with email: ${wrongEmail} do not exist`)
-
-			} catch (error) {
-				expect(error).to.be.a.instanceOf(Error)
-				expect(error.message).to.be.equal(`User with email: ${wrongEmail} do not exist`)
-			}
-		})
-
 		it('should fail on incorrect password', async () => {
-
-			let wrongPassword = 'di468hkc'
-
 			try {
-				await authenticateUser(email, wrongPassword)
-				throw new Error('wrong credentials')
+				await authenticateUser(email, `${password}-wrong`)
+				throw new Error('you should not reach this point')
 
 			} catch (error) {
 				expect(error).to.be.a.instanceOf(Error)
 				expect(error.message).to.be.equal('wrong credentials')
 			}
+
 		})
-		
 	})
+
 
 	describe('when user do not exist', () => {
 		beforeEach(async () => {
+			// creamos user.
+			const user = await User.create({ name, email, password })
+
 			// eliminamos al user
 			await User.deleteMany()
 		})
@@ -82,7 +74,7 @@ describe('authenticateUser', () => {
 		it('should fail and throw', async () => {
 			try {
 				await authenticateUser(email, password)
-				throw new Error(`User with email: ${email} do not exist`)
+				throw new Error('you should not reach this point')
 
 			} catch (error) {
 				expect(error).to.be.an.instanceOf(Error)
@@ -146,10 +138,10 @@ describe('authenticateUser', () => {
 	// 	);
 	// });
 
-    
-
 	after(async () => {
 		await User.deleteMany()
-		await mongoose.disconnect()
+
+		return await mongoose.disconnect()
 	})
 })
+    

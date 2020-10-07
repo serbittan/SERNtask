@@ -3,8 +3,6 @@ const bcrypt = require('bcrypt')
 
 
 const authenticateUser = (email, password) => {
-    // validate
-
     return (async () => {
         const user = await User.findOne({ email })
 
@@ -19,8 +17,9 @@ const authenticateUser = (email, password) => {
         await user.save()
 
         return user.id
-
-
+        
     })()
 }
+
 module.exports = authenticateUser
+

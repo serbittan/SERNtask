@@ -17,13 +17,18 @@ describe('updateTask', () => {
             useUnifiedTopology: true,
             useNewUrlParser: true
         })
-        await [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
+        
+        return [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
     })
 
     beforeEach(() => {
         name = `name-${random()}`
         email = `email-${random()}@mail.com`
         password = `password-${random()}`
+
+        name2 = `name2-${random()}`
+        email2 = `email2-${random()}@mail.com`
+        password2 = `password2-${random()}`
 
         projectName = `projectName-${random()}`
 
@@ -67,13 +72,17 @@ describe('updateTask', () => {
         })
     })
 
-    describe('when user does not exist', () => {
-        let id, _project, taskId
+    describe('when user and project-user are not the same', () => {
+        let id, id2, _project, taskId
 
         beforeEach(async () => {
             // crear user.
             const user = await User.create({ name, email, password })
             id = user.id
+
+            // crear user2.
+            const user2 = await User.create({ name: name2, email: email2, password: password2 })
+            id2 = user2.id
 
             // crear project.
             const project = await Project.create({ name: projectName })
@@ -86,14 +95,12 @@ describe('updateTask', () => {
             // crear task.
             const task = await Task.create({ name: taskName })
             taskId = task.id
-
-            // eliminar user.
-            await User.deleteMany()
         })
+
         it('should fail and throw', async () => {
             try {
-                const update = await updateTask(id, _project, taskId, taskName, status)
-                throw new Error('Not authorized')
+                const update = await updateTask(id2, _project, taskId, taskName, status)
+                throw new Error('you should not reach this point')
 
             } catch (error) {
                 expect(error).to.be.exist
@@ -126,10 +133,11 @@ describe('updateTask', () => {
             // eliminar project.
             await Project.deleteMany()
         })
+
         it('should fail and throw', async () => {
             try {
                 const update = await updateTask(id, _project, taskId, taskName, status)
-                throw new Error(`project with id: ${_project} not found`)
+                throw new Error('you should not reach this point')
 
             } catch (error) {
                 expect(error).to.be.exist
@@ -140,7 +148,7 @@ describe('updateTask', () => {
     })
 
     after(async () => {
-        await [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
-        await mongoose.disconnect()
+        [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
+        return await mongoose.disconnect()
     })
 })
