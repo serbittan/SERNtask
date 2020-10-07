@@ -2,8 +2,6 @@ const { models: { User } } = require('serntask-data')
 const bcrypt = require('bcrypt')
 
 const registerUser = (name, email, password) => {
-    // validate
-
     return (async () => {
         let user = await User.findOne({ email })
 
@@ -11,11 +9,11 @@ const registerUser = (name, email, password) => {
 
         const validPassword = await bcrypt.hash(password, 10)
 
-        user = await new User({ name, email, password : validPassword })
+        user = new User({ name, email, password : validPassword })
 
         await user.save()
 
     })()
-
 }
+
 module.exports = registerUser

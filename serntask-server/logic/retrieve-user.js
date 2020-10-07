@@ -2,8 +2,6 @@ const { models: { User } } = require('serntask-data')
 
 
 const retrieveUser = (id) => {
-    
-
     return (async () => {
         const user = await User.findById(id).lean().select('-password')
 
@@ -21,3 +19,4 @@ const retrieveUser = (id) => {
 }
 
 module.exports = retrieveUser
+    

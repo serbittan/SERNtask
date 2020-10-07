@@ -2,8 +2,6 @@ const { models: { Project } } = require('serntask-data')
 
 
 const updateProject = (id, projectId, name) => {
-
-
     return (async () => {
         let project = await Project.findById(projectId)
 
@@ -23,8 +21,9 @@ const updateProject = (id, projectId, name) => {
 
         return project
 
-
     })()
 }
 
 module.exports = updateProject
+
+

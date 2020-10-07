@@ -15,7 +15,7 @@ describe('retrieveUser', () => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
-        await User.deleteMany()
+        return await User.deleteMany()
     })
 
     beforeEach(() => {
@@ -58,7 +58,8 @@ describe('retrieveUser', () => {
         it('should fail a throw', async () => {
             try {
                 const user = await retrieveUser(_id)
-                throw new Error(`User with id: ${_id} not exist`)
+                throw new Error('you should not reach this point')
+                
             } catch (error) {
                 expect(error).to.exist
                 expect(error).to.be.an.instanceOf(Error)
@@ -99,7 +100,7 @@ describe('retrieveUser', () => {
 
     after(async () => {
         await User.deleteMany()
-        await mongoose.disconnect()
+        return await mongoose.disconnect()
     })
 
 })

@@ -8,8 +8,7 @@ const createProject = require('./create-project')
 
 
 describe('createProject', () => {
-    let projectName
-    let name, email, password
+    let name, email, password, projectName
     
     before(async () => {
         await mongoose.connect(TEST_MONGODB_URL, {
@@ -17,7 +16,7 @@ describe('createProject', () => {
             useNewUrlParser: true
         })
 
-        await [User.deleteMany(), Project.deleteMany()]
+        return [User.deleteMany(), Project.deleteMany()]
     })
 
     beforeEach(() => {
@@ -58,17 +57,21 @@ describe('createProject', () => {
     })
 
     describe('when user do not exist', () => {
-        let noId
-
+        let _id
+        
         beforeEach(async () => {
+            // creamos user.
+            const { id } = await User.create({ name, email, password })
+            _id = id
+
             // eliminamos al user
             await User.deleteMany()
         })
 
         it('should fail and throw', async () => {
             try {
-                await createProject(noId, projectName)
-                throw new Error('User not found')
+                await createProject(_id, projectName)
+                throw new Error('you should not reach this point')
 
             } catch (error) {
                 expect(error).to.be.exist
@@ -79,8 +82,9 @@ describe('createProject', () => {
     })
 
     after(async () => {
-        await [User.deleteMany(), Project.deleteMany()]
-        await mongoose.disconnect()
+        [User.deleteMany(), Project.deleteMany()]
+
+        return await mongoose.disconnect()
     })
 })
 

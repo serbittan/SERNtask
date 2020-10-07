@@ -15,13 +15,17 @@ describe('createTask', () => {
             useNewUrlParser: true
         })
         
-        await [Project.deleteMany(), Project.deleteMany(), Task.deleteMany()]
+        return [Project.deleteMany(), Project.deleteMany(), Task.deleteMany()]
     })
 
     beforeEach(() => {
         name = `name-${random()}`
         email = `email-${random()}@mail.com`
         password = `password-${random()}`
+
+        name2 = `name2-${random()}`
+        email2 = `email2-${random()}@mail.com`
+        password2 = `password2-${random()}`
 
         projectName = `projectName-${random()}`
 
@@ -63,30 +67,32 @@ describe('createTask', () => {
         })
     })
 
-    describe('when user does not exist', () => {
-        let _id , _project
+    describe('when user and project-user are not the same', () => {
+        let _id, _id2, _project
 
         beforeEach(async () => {
             // creamos user
-            const { id } = await User.create({ name, email, password })
-            _id = id
+            const user = await User.create({ name, email, password })
 
+            _id = user.id
+            // creamos user2.
+            const user2 = await User.create({ name: name2, email: email2, password: password2 })
+
+            _id2 = user2.id
             // creamos project.
             const project = await Project.create({ name: projectName })
+
             _project = project.id
 
             project.creator = _id
 
             await project.save()
-
-            // eliminamos el user
-            await User.deleteMany()
         })
 
         it('should fail and throw', async () => {
             try {
-                await createTask(_id, taskName, _project)
-                throw new Error('Not authorized')
+                await createTask(_id2, taskName, _project)
+                throw new Error('you should not reach this point')
 
             } catch (error) {
                 expect(error).to.be.exist
@@ -102,10 +108,11 @@ describe('createTask', () => {
         beforeEach(async () => {
             // creamos user
             const user = await User.create({ name, email, password })
-            id = user.id
 
+            id = user.id
             // creamos project.
             const project = await Project.create({ name: projectName })
+
             _project = project.id
 
             project.creator = id
@@ -119,7 +126,7 @@ describe('createTask', () => {
         it('should fail and throw', async () => {
             try {
                 await createTask(id, taskName, _project)
-                throw new Error(`Project with id ${_project} not found`)
+                throw new Error('you should not reach this point')
 
             } catch (error) {
                 expect(error).to.be.exist
@@ -130,7 +137,8 @@ describe('createTask', () => {
     })
 
     after(async () => {
-        await [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
-        await mongoose.disconnect()
+        [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
+        
+        return await mongoose.disconnect()
     })
 })

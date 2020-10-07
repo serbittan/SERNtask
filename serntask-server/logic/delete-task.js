@@ -2,7 +2,6 @@ const { models: { Project, Task } } = require('serntask-data')
 
 
 const deleteTask = (id, project, taskId) => {
-
     return (async () => {
         const _project = await Project.findById(project)
 

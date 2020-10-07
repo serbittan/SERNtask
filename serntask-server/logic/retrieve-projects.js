@@ -2,7 +2,6 @@ const { models: { Project } } = require('serntask-data')
 
 
 const retrieveProjects = (id) => {
-
     return (async () => {
         const projects = await Project.find({ creator: id }).lean()
 

@@ -44,21 +44,17 @@ describe('registerUser', () => {
         expect(_password).to.be.true
     })
 
-    describe('when user already exist', () => {
-        let id
-        
+    describe('when user already exist', () => {        
         // creamos al usuario
         beforeEach(async () => {
             const user = await User.create({ name, email, password })
-
-            id = user.id
-            await user.save()
         })
-        
+
         it('should fail and throw', async () => {
             try {
                 await registerUser(name, email, password)
-                throw new Error('user already exist')
+                throw new Error('you should not reach this point')
+
             } catch (error) {
                 expect(error).to.be.an.instanceOf(Error)
                 expect(error.message).to.be.equal('user already exist')
@@ -163,7 +159,7 @@ describe('registerUser', () => {
 
     after(async () => {
         await User.deleteMany()
-        await mongoose.disconnect()
+        return await mongoose.disconnect()
     })
 
 })

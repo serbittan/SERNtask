@@ -13,7 +13,8 @@ describe('retrieveTasks', () => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
-        await [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
+        
+        return [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
     })
 
     beforeEach(() => {
@@ -21,13 +22,17 @@ describe('retrieveTasks', () => {
         email = `email-${random()}@mail.com`
         password = `password-${random()}`
 
+        name2 = `name2-${random()}`
+        email2 = `email2-${random()}@mail.com`
+        password2 = `password2-${random()}`
+
         projectName = `projectName-${random()}`
 
         taskName = `taskName-${random()}`
     })
 
     describe('when user and project exist', () => {
-        let id, _project, taskId
+        let id, _project
 
         beforeEach(async () => {
             // creamos user.
@@ -44,7 +49,6 @@ describe('retrieveTasks', () => {
 
             // creamos una task.
             const task = await Task.create({ name: taskName, project: _project })
-            taskId = task.id
         })
 
         it('should succeed in retrieve all tasks', async () => {
@@ -61,13 +65,17 @@ describe('retrieveTasks', () => {
         })
     })
 
-    describe('when user does not exist', () => {
-        let id, _project, taskId
+    describe('when user and project-user are not the same', () => {
+        let id, id2, _project
 
         beforeEach(async () => {
             // creamos user.
             const user = await User.create({ name, email, password })
             id = user.id
+
+            // creamos user2.
+            const user2 = await User.create({ name: name2, email: email2, password: password2 })
+            id2 = user2.id
 
             // creamos project.
             const project = await Project.create({ name: projectName })
@@ -79,16 +87,13 @@ describe('retrieveTasks', () => {
 
             // creamos task.
             const task = await Task.create({ name: taskName, project: _project })
-            taskId = task.id
-
-            // eliminamos user.
-            await User.deleteMany()
         })
 
         it('should fail and throw', async () => {
             try {
-                const tasks = retrieveTasks(id, _project)
-                throw new Error('Not authorized')
+                const tasks = await retrieveTasks(id2, _project)
+                throw new Error('you should not reach this point')
+
             } catch (error) {
                 expect(error).to.exist
                 expect(error).to.be.an.instanceOf(Error)
@@ -98,7 +103,7 @@ describe('retrieveTasks', () => {
     })
 
     describe('when project does not exist', () => {
-        let id, _project, taskId
+        let id, _project
 
         beforeEach(async () => {
             // creamos user.
@@ -115,7 +120,6 @@ describe('retrieveTasks', () => {
 
             // creamos task.
             const task = await Task.create({ name: taskName, project: _project })
-            taskId = task.id
 
             // eliminamos project.
             await Project.deleteMany()
@@ -123,8 +127,8 @@ describe('retrieveTasks', () => {
 
         it('should fail and throw', async () => {
             try {
-                const tasks = retrieveTasks(id, _project)
-                throw new Error(`project with id: ${_project} not found`)
+                const tasks = await retrieveTasks(id, _project)
+                throw new Error('you should not reach this point')
 
             } catch (error) {
                 expect(error).to.exist
@@ -135,8 +139,8 @@ describe('retrieveTasks', () => {
     })
 
     after(async () => {
-        await [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
-        await mongoose.disconnect()
+        [User.deleteMany(), Project.deleteMany(), Task.deleteMany()]
+        return await mongoose.disconnect()
     })
             
 })

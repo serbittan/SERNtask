@@ -1,7 +1,6 @@
 const { models: { Project } } = require('serntask-data')
 
 const deleteProject = (id, projectId) => {
-
     return (async () => {
         const project = await Project.findById(projectId)
         
@@ -13,8 +12,8 @@ const deleteProject = (id, projectId) => {
 
         return 
 
-
     })()
 }
 
 module.exports = deleteProject
+

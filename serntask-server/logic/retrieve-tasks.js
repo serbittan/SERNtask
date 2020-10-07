@@ -2,7 +2,6 @@ const { models: { Project, Task } } = require('serntask-data')
 
 
 const retrieveTasks = (id, project) => {
-    
     return (async () => {
         const _project = await Project.findById(project)
 
@@ -23,3 +22,4 @@ const retrieveTasks = (id, project) => {
 }
 
 module.exports = retrieveTasks
+    
