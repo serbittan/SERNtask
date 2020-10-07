@@ -36,8 +36,4 @@
 
 JavaScript, ReactJS, Node.js, Express, MongoDB, Mongoose. Testing: Jest & Mocha/Chai
 
-## TO DO
 
-
-
-- Testing in serntask-cliente in process.
