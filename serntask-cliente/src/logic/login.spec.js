@@ -74,6 +74,7 @@ describe('login', () => {
         password = `${password}-wrong`
         try {
             const response = await login({ email, password })
+            console.log(response)
             throw new Error('should not reach this point')
 
         } catch (error) {

@@ -119,7 +119,7 @@ describe('retrieveTasks', () => {
         })
     })
 
-    describe('when user and user project are not the same', () => {
+    describe('when user and user-project are not the same', () => {
         let id, id2, _project
 
         beforeEach(async () => {

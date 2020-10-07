@@ -126,6 +126,7 @@ describe('updateProject', () => {
             const token = jwt.sign({ sub: id }, TEST_JWT_SECRET)
 
             tokenAuth(token)
+            
             // eliminar project.
             await Project.deleteMany()
         })
